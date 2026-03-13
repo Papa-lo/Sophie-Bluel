@@ -1,0 +1,83 @@
+/* ============================================================
+   STYLE DE LA MODALE (FOND ET CENTRAGE)
+   ============================================================ */
+.modal-overlay {/*--- FOND ---*/
+    position: fixed;/* Fixe l'élément par rapport à la fenêtre du navigateur */
+    top: 0;/* Positionne l'élément tout en haut */
+    left: 0;/* Positionne l'élément tout à gauche */
+    width: 100%;/* Lui donne la taille totale de l'écran */
+    height: 100%;/* Lui donne la taille totale de l'écran */
+    background-color: rgba(0, 0, 0, 0.5);/* Couleur de fond : noir (0,0,0) avec une opacité de 50% (0.5) */
+
+    /* --- FLEXBOX (Magie du centrage) --- */
+    display: flex;/* Transforme la div en conteneur flexible */
+    justify-content: center;/* Centre horizontalement les enfants (la boîte blanche) */
+    align-items: center;/* Centre verticalement les enfants */
+}
+
+.modal-box {/*--- BOITE BLANCHE ---*/
+        /* Taille de la boîte */
+    width: 420px; /* Une largeur fixe pour un formulaire */
+    height: 600px; /* Une hauteur fixe ou auto */
+    
+    /* Style visuel */
+    background-color: white; /* Fond blanc */
+    border-radius: 10px; /* Coins arrondis */
+    /* ESPACEMENT INTERNE (Très important !) */
+    /* Ajoute de l'air à l'intérieur de la boîte 
+    pour que le texte ne touche pas les bords */
+    padding: 30px;
+    /* Positionnement */
+    position: relative; /* Pour pouvoir placer la croix (X) précisément */
+}
+
+.modal-close {/*--- CROIX ---*/
+    font-size: 24px; /* Grosse croix */
+    font-weight: bold;
+    color: #333; /* Couleur foncée */
+    cursor: pointer; /* Change le curseur en main au survol */
+    /* Positionnement (grâce au "position: relative" du parent) */
+    position: absolute;/* On la sort du flux normal */
+    top: 15px;/* A 15px du haut */
+    right: 20px;/* A 20px de la droite */
+}
+
+/* ============================================================
+   STYLE DES IMAGES DANS LA MODALE
+   ============================================================ */
+
+/* Le conteneur de l'image (la boîte) */
+.modal-image-container {
+    position: relative; /* TRÈS IMPORTANT : ça permet à la poubelle de se positionner par rapport à cette boîte */
+    width: 80px; /* Taille fixe du carré */
+    height: 80px;
+    margin: 5px; /* Petit espace entre les images */
+}
+
+/* L'image elle-même */
+.modal-image-container img {
+    width: 100%; /* L'image prend toute la place dans la boîte */
+    height: 100%;
+    object-fit: cover; /* L'image remplit le carré sans être déformée */
+}
+
+/* L'icône poubelle */
+.icone-suppr {
+    position: absolute; /* Elle flotte par-dessus l'image */
+    top: 5px; /* A 5px du haut */
+    left: 5px; /* A 5px de gauche */
+    background-color: black; /* Fond noir */
+    color: white; /* Poubelle blanche */
+    padding: 5px; /* Un peu d'espace autour */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 12px; /* Taille de l'icône */
+    cursor: pointer; /* Curseur main */
+}
+
+.modal-gallery {
+    display: flex; /* Aligner les images sur une ligne */
+    flex-wrap: wrap; /* Passer à la ligne suivante si ça dépasse */
+    justify-content: center; /* Centrer les images */
+    overflow-y: auto; /* Ajouter une barre de défilement si trop d'images */
+    height: 80%; /* Prendre 80% de la hauteur de la modale */
+}
