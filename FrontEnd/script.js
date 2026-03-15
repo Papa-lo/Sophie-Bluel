@@ -198,19 +198,45 @@ function OUVRIR_MODALE() {
     // C'est du contenu "statique" (il ne bouge pas). On a juste besoin de l'afficher.
     // Pas besoin de variable.
     // C'est donc beaucoup plus rapide d'écrire le HTML d'un coup comme ça
-    CONTENEUR_FORMULAIRE_MODALE.innerHTML = `
+        CONTENEUR_FORMULAIRE_MODALE.innerHTML = `
         <div class="champ-image">
             <input type="file" id="image-input" accept="image/*" required>
             <label for="image-input">+ Ajouter photo</label>
             <img id="preview-image" src="" alt="" style="display:none; max-width:100px;">
         </div>
-        <label for="title">Titre</label>
+        <label for="title-input">Titre</label> <!-- CORRECTION : for="title-input" -->
         <input type="text" id="title-input" required>
-        <label for="category">Catégorie</label>
+        <label for="category-input">Catégorie</label> <!-- CORRECTION : for="category-input" -->
         <select id="category-input"></select>
         <button id="btn-valider">Valider</button>
     `;
     BOITE_MODALE.appendChild(CONTENEUR_FORMULAIRE_MODALE);// Assemblage on met le formulaire dans la grande boite blanche
+
+
+
+
+        // --- APERÇU DE L'IMAGE AVANT ENVOI ---
+    const CHAMP_IMAGE_INPUT = document.getElementById("image-input");
+    console.log("Input trouvé ?", CHAMP_IMAGE_INPUT);
+    const PREVIEW_IMAGE = document.getElementById("preview-image"); // J'avais oublié cette ligne !
+
+    console.log("Image preview trouvée ?", PREVIEW_IMAGE);
+
+    CHAMP_IMAGE_INPUT.addEventListener("change", function (event) {
+        console.log("Fichier sélectionné détecté !");
+        const FICHIER = event.target.files[0];
+        if (FICHIER) {
+            const LECTEUR = new FileReader();
+            LECTEUR.onload = function(e) {
+                PREVIEW_IMAGE.src = e.target.result; // On charge l'aperçu
+                PREVIEW_IMAGE.style.display = "block"; // On l'affiche
+            };
+            LECTEUR.readAsDataURL(FICHIER);
+        }
+    });
+
+
+
 
     document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);// --- INTELLIGENCE DU BOUTON VALIDER (Ajouté une seule fois) ---
 
