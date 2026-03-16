@@ -47,9 +47,11 @@ if (TOKEN_OK) { // Si on a trouvé un token dans l'armoire...
 
 } else {// Sinon, on est en mode visiteur (donc affiche les filtres)
     const CONTENEUR_DES_FILTRES = document.createElement("div");// Création balise <div> "conteneur des BOUTONS de filtres"
+    CONTENEUR_DES_FILTRES.classList.add("conteneur-filtres");// AJOUT CLASS POUR CSS
     CONTENEUR_GALERIE_DU_HTML.before(CONTENEUR_DES_FILTRES);// "before" sur la galerie insère le "conteneur de BOUTONS de filtres" avant la galerie
 
     const BOUTON_FILTRE_TOUS = document.createElement("button");// Création bouton filtre "Tous"
+    BOUTON_FILTRE_TOUS.classList.add("btn-filtre");// AJOUT CLASS POUR CSS
     BOUTON_FILTRE_TOUS.innerText = "Tous"; // Texte du bouton
     CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_TOUS);// Assemblage bouton dans "conteneur de BOUTONS"
 
@@ -60,6 +62,7 @@ if (TOKEN_OK) { // Si on a trouvé un token dans l'armoire...
 
     for (const CATEGORIE of LISTE_CATEGORIES) {// Boucle sur catégorie pour création autres boutons
         const BOUTON_FILTRE_CATEGORIE = document.createElement("button");// Création bouton
+        BOUTON_FILTRE_CATEGORIE.classList.add("btn-filtre");// AJOUT CLASS POUR CSS
         BOUTON_FILTRE_CATEGORIE.innerText = CATEGORIE.name; // Texte du bouton
 
         CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_CATEGORIE);// Assemblage bouton dans "conteneur de BOUTONS"
@@ -178,11 +181,7 @@ function OUVRIR_MODALE() {
             CONTENEUR_FOND_MODALE.remove();// Suppression fond
         }
     });
-
-    //===================================================================================
-    //tentative de réparation des conneries de Z (dans la fonction OUVRIR_MODALE)!!!!!!!!
-    //===================================================================================
-    
+   
     const BOUTON_AJOUTER_PHOTO = document.createElement("button");// --- AJOUT DU BOUTON "AJOUTER UNE PHOTO" ---
     BOUTON_AJOUTER_PHOTO.innerText = "Ajouter une photo";
     BOUTON_AJOUTER_PHOTO.classList.add("btn-ajout-photo"); // Classe CSS à styliser plus tard

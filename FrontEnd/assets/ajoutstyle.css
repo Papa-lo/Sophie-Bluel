@@ -81,3 +81,31 @@
     overflow-y: auto; /* Ajouter une barre de défilement si trop d'images */
     height: 80%; /* Prendre 80% de la hauteur de la modale */
 }
+
+
+/* ╔══════════════════════════════════════════════════════════════╗
+// ║                  BOUTONS FILTRES                             ║
+// ╚══════════════════════════════════════════════════════════════╝*/
+
+.conteneur-filtres {
+    display: flex;
+    justify-content: center; /* Pour centrer les boutons */
+    gap: 10px; /* Espace entre les boutons */
+    margin-bottom: 20px; /* Espace avant la galerie */
+}
+
+.btn-filtre {
+    height: 37px;
+    width: 100px;
+    border-radius: 18px;
+    border: solid 1px rgba(29, 97, 84, 1);
+    color: rgba(29, 97, 84, 1);
+    background-color: white;
+    font-weight: bold;
+}
+
+.btn-filtre:hover {
+    background-color: rgba(29, 97, 84, 1);
+    border: solid 1px white;
+    color: white;
+}
