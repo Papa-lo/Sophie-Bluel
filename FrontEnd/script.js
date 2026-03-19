@@ -19,7 +19,7 @@ function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {// --- FONCTION GÉN�
     CONTENEUR_GALERIE_DU_HTML.innerHTML = "";// On vide la galerie (pour enlever les images fixes du HTML)
 
     for (const PROJET of LISTE_PROJETS_ALIAS) {// Boucle sur chaque projet reçu en argument        
-        const CARTE_PROJET = document.createElement("figure");// Création balise <figure>
+        const CARTE_PROJET = document.createElement("figure");// Création balise <figure> --- CARTE ---
 
         const CARTE_PROJET_IMG = document.createElement("img");// Création balise <img>
         CARTE_PROJET_IMG.src = PROJET.imageUrl;// Image associée
@@ -81,6 +81,9 @@ if (TOKEN_OK) { // Si on a trouvé un token dans l'armoire...
 // ║               4. FONCTION MODE ADMIN ACTIVE                  ║
 // ╚══════════════════════════════════════════════════════════════╝
 function MODE_ADMIN_ACTIVE() {// Fonction d'affichage pour le mode Administrateur
+    
+    
+    
     const LIEN_LOGIN = document.querySelector("nav li:nth-child(3) a"); // On cible le 3ème <li> qui contient le lien login
     LIEN_LOGIN.innerText = "logout"; // On change le texte en "logout"
     LIEN_LOGIN.addEventListener("click", function (event) {
@@ -95,11 +98,17 @@ function MODE_ADMIN_ACTIVE() {// Fonction d'affichage pour le mode Administrateu
     console.log("Bande noire créée !");
     console.log("Fonction Admin activée");
 
+    const TITRE_PROJETS_DU_HTML = document.querySelector("#portfolio h2");//Ciblage h2 "Mes Projets"
+    const TITRE_CONTENEUR = document.createElement("div");// Création conteneur titre et bouton
+    TITRE_CONTENEUR.classList.add("titre-projets-container");// Ajout class
+    TITRE_PROJETS_DU_HTML.before(TITRE_CONTENEUR);//Insertion juste avant le h2
+    TITRE_CONTENEUR.appendChild(TITRE_PROJETS_DU_HTML);// On met le h2 dans le conteneur
+
     const BOUTON_OUVRIR_MODALE = document.createElement("button");// --- CRÉATION DU BOUTON "MODIFIER" ---
     BOUTON_OUVRIR_MODALE.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Modifier`;//Ajout stylo et texte
     BOUTON_OUVRIR_MODALE.classList.add("modif-button"); //Ajoute la class
-    const TITRE_PROJETS_DU_HTML = document.querySelector("#portfolio h2");//Ciblage h2 "Mes Projets"
-    TITRE_PROJETS_DU_HTML.after(BOUTON_OUVRIR_MODALE);//Insertion juste après ce h2
+    TITRE_CONTENEUR.appendChild(BOUTON_OUVRIR_MODALE);// On met le bouton dans le conteneur
+    
 
     BOUTON_OUVRIR_MODALE.addEventListener("click", function () {//Ecoute du click --- OUVERTURE DE LA MODALE ---
         OUVRIR_MODALE();
@@ -199,6 +208,7 @@ function OUVRIR_MODALE() {
     // C'est donc beaucoup plus rapide d'écrire le HTML d'un coup comme ça
         CONTENEUR_FORMULAIRE_MODALE.innerHTML = `
         <div class="champ-image">
+            <img src="./assets/icons/picture-svgrepo-com 1.png" class="icone-placeholder" alt="Icône image">
             <input type="file" id="image-input" accept="image/*" required>
             <label for="image-input">+ Ajouter photo</label>
             <img id="preview-image" src="" alt="" style="display:none; max-width:100px;">
@@ -221,12 +231,23 @@ function OUVRIR_MODALE() {
 
     console.log("Image preview trouvée ?", PREVIEW_IMAGE);
 
+    const APERCU_AFFICHER = document.querySelector(".icone-placeholder");// Ciblage APERCU AFFICHER
+    const LABEL_AJOUTER = document.querySelector("label[for='image-input']");// Ciblage
+
     CHAMP_IMAGE_INPUT.addEventListener("change", function (event) {
         console.log("Fichier sélectionné détecté !");
         const FICHIER = event.target.files[0];
         if (FICHIER) {
             const LECTEUR = new FileReader();
             LECTEUR.onload = function(e) {
+
+                APERCU_AFFICHER.style.display = "none"; // On cache l'icône paysage
+                LABEL_AJOUTER.style.display = "none"; // On cache le bouton "Ajouter photo"
+                PREVIEW_IMAGE.style.width = "100%"; // L'image prend toute la largeur
+                PREVIEW_IMAGE.style.height = "100%"; // L'image prend toute la hauteur
+                PREVIEW_IMAGE.style.objectFit = "contain"; // L'image remplit sans être déformée
+                PREVIEW_IMAGE.style.maxWidth = "none";
+
                 PREVIEW_IMAGE.src = e.target.result; // On charge l'aperçu
                 PREVIEW_IMAGE.style.display = "block"; // On l'affiche
             };
@@ -240,9 +261,10 @@ function OUVRIR_MODALE() {
     document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);// --- INTELLIGENCE DU BOUTON VALIDER (Ajouté une seule fois) ---
 
     BOUTON_AJOUTER_PHOTO.addEventListener("click", function () {// --- INTELLIGENCE DE BASCULE (Galerie <-> Formulaire) ---
+        TITRE_BOITE_MODALE.innerText = "Ajout photo";
         CONTENEUR_GALERIE_MODALE.style.display = "none"; // On cache la galerie
         BOUTON_AJOUTER_PHOTO.style.display = "none"; // On cache le bouton ajouter
-        CONTENEUR_FORMULAIRE_MODALE.style.display = "block"; // On affiche le formulaire
+        CONTENEUR_FORMULAIRE_MODALE.style.display = ""; // On affiche le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "block"; // On affiche la fleche de retour
 
         // On remplit le select des catégories dynamiquement
@@ -257,10 +279,15 @@ function OUVRIR_MODALE() {
     });
 
     BOUTON_FLECHE_RETOUR.addEventListener("click", function () {// --- INTELLIGENCE DE BASCULE (Formulaire <-> Galerie) ---
+        TITRE_BOITE_MODALE.innerText = "Galerie photo";
         CONTENEUR_GALERIE_MODALE.style.display = ""; // On laisse le CSS s'occupper de l'affichage
         BOUTON_AJOUTER_PHOTO.style.display = "block"; // On affiche le bouton ajouter
         CONTENEUR_FORMULAIRE_MODALE.style.display = "none"; // On cache le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "none"; // On cache la fleche de retour
+        CHAMP_IMAGE_INPUT.value = "";// Vide l'image choisie
+        PREVIEW_IMAGE.style.display = "none";// Cache son apperçu
+        APERCU_AFFICHER.style.display = "block";// Réafficher l'aperçu
+        LABEL_AJOUTER.style.display = "inline-block";// Réafficher le bouton
     });
 
 }
