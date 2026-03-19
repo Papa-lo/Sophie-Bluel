@@ -10,68 +10,87 @@ const LISTE_CATEGORIES = await RETOUR_SERVEUR_CATEGORIES.json();// Transformatio
 console.log(LISTE_CATEGORIES);// Vérification console de reception des données
 
 // ╔══════════════════════════════════════════════════════════════╗
-// ║                  2. AFFICHAGE DE LA GALERIE                  ║
+// ║                        2. GALERIE                            ║
 // ╚══════════════════════════════════════════════════════════════╝
+/* ╔══════════════════════════════╗
+// ║        CIBLAGE GALERIE       ║
+// ╚══════════════════════════════╝*/
 const CONTENEUR_GALERIE_DU_HTML = document.querySelector(".gallery");// Ciblage balise HTML avec class "gallery" pour pouvoir la manipuler
 
-function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {// --- FONCTION GÉNÉRER IMAGES DYNAMIQUEMENT ---
+/* ╔══════════════════════════════╗
+// ║     CONSTRUCTION GALERIE     ║
+// ╚══════════════════════════════╝*/
+function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {
 
     CONTENEUR_GALERIE_DU_HTML.innerHTML = "";// On vide la galerie (pour enlever les images fixes du HTML)
 
     for (const PROJET of LISTE_PROJETS_ALIAS) {// Boucle sur chaque projet reçu en argument        
-        const CARTE_PROJET = document.createElement("figure");// Création balise <figure> --- CARTE ---
-
-        const CARTE_PROJET_IMG = document.createElement("img");// Création balise <img>
-        CARTE_PROJET_IMG.src = PROJET.imageUrl;// Image associée
-
-        const CARTE_PROJET_LEGENDE = document.createElement("figcaption");// Création legende
-        CARTE_PROJET_LEGENDE.innerText = PROJET.title;// Texte associée
-
-        CARTE_PROJET.appendChild(CARTE_PROJET_IMG);// Assemblage : image dans figure
-        CARTE_PROJET.appendChild(CARTE_PROJET_LEGENDE);// Assemblage legende dans figure
-        CONTENEUR_GALERIE_DU_HTML.appendChild(CARTE_PROJET);// Assemblage figure dans galerie
+        const CARTE_PROJET = document.createElement("figure");// =========== CREATION CARTE ===========
+        const CARTE_PROJET_IMG = document.createElement("img");// Création <img>
+        CARTE_PROJET_IMG.src = PROJET.imageUrl;
+        const CARTE_PROJET_LEGENDE = document.createElement("figcaption");// Création Texte
+        CARTE_PROJET_LEGENDE.innerText = PROJET.title;
+        // =========== ASSEMBLAGE CARTE ===========
+        CARTE_PROJET.appendChild(CARTE_PROJET_IMG);// Image dans carte
+        CARTE_PROJET.appendChild(CARTE_PROJET_LEGENDE);// Legende dans carte
+        CONTENEUR_GALERIE_DU_HTML.appendChild(CARTE_PROJET);// Carte dans galerie
     }
 }
-
+/* ╔══════════════════════════════╗
+// ║      AFFICHAGE GALERIE       ║
+// ╚══════════════════════════════╝*/
 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);// Affichage galerie une 1ère fois au chargement
+
 
 // ╔══════════════════════════════════════════════════════════════╗
 // ║                  3. GESTION ADMIN / VISITEUR                 ║
 // ╚══════════════════════════════════════════════════════════════╝
-const TOKEN_OK = window.localStorage.getItem("token");// Verif si token dans l'ARMOIRE (: localStorage de windows ???)
+/* ╔══════════════════════════════╗
+// ║      VERIFICATION TOKEN      ║
+// ╚══════════════════════════════╝*/
+const TOKEN_OK = window.localStorage.getItem("token");// Verif si token dans l'ARMOIRE
 
 if (TOKEN_OK) { // Si on a trouvé un token dans l'armoire...
     console.log("Admin connecté !"); // ...on le signale dans la console
 
     MODE_ADMIN_ACTIVE(); // Appel fonction d'affichage Admin (PLUS BAS DANS LES LIGNES)
 
-} else {// Sinon, on est en mode visiteur (donc affiche les filtres)
-    const CONTENEUR_DES_FILTRES = document.createElement("div");// Création balise <div> "conteneur des BOUTONS de filtres"
-    CONTENEUR_DES_FILTRES.classList.add("conteneur-filtres");// AJOUT CLASS POUR CSS
-    CONTENEUR_GALERIE_DU_HTML.before(CONTENEUR_DES_FILTRES);// "before" sur la galerie insère le "conteneur de BOUTONS de filtres" avant la galerie
+} else {// ======== Mode visiteur ========
+    /* ╔══════════════════════════════╗
+    // ║      CONTENEUR FILTRES       ║
+    // ╚══════════════════════════════╝*/
+    const CONTENEUR_DES_FILTRES = document.createElement("div");// =========== CREATION CONTENEUR DES FILTRES ===========
+    CONTENEUR_DES_FILTRES.classList.add("conteneur-filtres");// CLASS
+    CONTENEUR_GALERIE_DU_HTML.before(CONTENEUR_DES_FILTRES);// Insertion "before" galerie
 
-    const BOUTON_FILTRE_TOUS = document.createElement("button");// Création bouton filtre "Tous"
-    BOUTON_FILTRE_TOUS.classList.add("btn-filtre");// AJOUT CLASS POUR CSS
-    BOUTON_FILTRE_TOUS.innerText = "Tous"; // Texte du bouton
-    CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_TOUS);// Assemblage bouton dans "conteneur de BOUTONS"
-
-    BOUTON_FILTRE_TOUS.addEventListener("click", function () {// --------- INTELLIGENCE BOUTON_FILTRE_TOUS ---------
-        GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);
-        console.log("c'est bon");
+    const BOUTON_FILTRE_TOUS = document.createElement("button");// =========== Création bouton TOUS ===========
+    BOUTON_FILTRE_TOUS.classList.add("btn-filtre");// CLASS
+    BOUTON_FILTRE_TOUS.innerText = "Tous"; // Texte
+    // =========== ASSEMBLAGE BOUTON DANS CONTENEUR DES FILTRES ===========
+    CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_TOUS);
+    
+    BOUTON_FILTRE_TOUS.addEventListener("click", function () {/** ┌──────────────────────────────┐*/
+        GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);           /** │      CLICK BOUTON TOUS       │*/
+        console.log("c'est bon");                             /** └──────────────────────────────┘*/
     });
 
     for (const CATEGORIE of LISTE_CATEGORIES) {// Boucle sur catégorie pour création autres boutons
-        const BOUTON_FILTRE_CATEGORIE = document.createElement("button");// Création bouton
-        BOUTON_FILTRE_CATEGORIE.classList.add("btn-filtre");// AJOUT CLASS POUR CSS
-        BOUTON_FILTRE_CATEGORIE.innerText = CATEGORIE.name; // Texte du bouton
+    const BOUTON_FILTRE_CATEGORIE = document.createElement("button");// =========== CREATION AUTRES BOUTONS ===========
+        BOUTON_FILTRE_CATEGORIE.classList.add("btn-filtre");// CLASS
+        BOUTON_FILTRE_CATEGORIE.innerText = CATEGORIE.name; // Texte
+        // ======== ASSEMBLAGE AUTRES BOUTONS DANS CONTENEUR DES FILTRES ========
+        CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_CATEGORIE);
 
-        CONTENEUR_DES_FILTRES.appendChild(BOUTON_FILTRE_CATEGORIE);// Assemblage bouton dans "conteneur de BOUTONS"
-
-        BOUTON_FILTRE_CATEGORIE.addEventListener("click", function () {// --------- INTELLIGENCE DES BOUTONS CATÉGORIES ---------
-            const LISTE_PROJETS_FILTRES = LISTE_PROJETS.filter(function (PROJET) {// Filtrage projets qui ont même ID que catégorie bouton (voir doc1)
-                return PROJET.categoryId === CATEGORIE.id;
+        BOUTON_FILTRE_CATEGORIE.addEventListener("click", function () {             /** ┌──────────────────────────────┐*/
+            const LISTE_PROJETS_FILTRES = LISTE_PROJETS.filter(function (PROJET) {  /** │     CLICK AUTRES BOUTONS     │*/
+                                                                                    /** └──────────────────────────────┘*/
+                return PROJET.categoryId === CATEGORIE.id;// Filtrage projets qui ont même ID que catégorie bouton (voir doc1)
             });
 
+
+            /* ╔══════════════════════════════╗
+            // ║      AFFICHAGE FILTRé        ║
+            // ╚══════════════════════════════╝*/
             GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_FILTRES);// Appel fonction d'affichage avec la liste filtrée            
         });
     }
@@ -82,35 +101,50 @@ if (TOKEN_OK) { // Si on a trouvé un token dans l'armoire...
 // ╚══════════════════════════════════════════════════════════════╝
 function MODE_ADMIN_ACTIVE() {// Fonction d'affichage pour le mode Administrateur
     
+    /* ╔══════════════════════════════╗
+    // ║      CIBLAGE LIEN LOGIN      ║
+    // ╚══════════════════════════════╝*/
+    const LIEN_LOGIN = document.querySelector("nav li:nth-child(3) a");
     
-    
-    const LIEN_LOGIN = document.querySelector("nav li:nth-child(3) a"); // On cible le 3ème <li> qui contient le lien login
-    LIEN_LOGIN.innerText = "logout"; // On change le texte en "logout"
-    LIEN_LOGIN.addEventListener("click", function (event) {
+    LIEN_LOGIN.innerText = "logout"; // Change le texte en "logout"
+    LIEN_LOGIN.addEventListener("click", function (event) { /** ┌──────────────────────────────┐*/
+                                                            /** │       CLICK LIEN LOGIN       │*/
+                                                            /** └──────────────────────────────┘*/
         event.preventDefault(); // On empêche la navigation vers la page login.html
         window.localStorage.removeItem("token"); // On efface le token de l'armoire
-        window.location.href = "index.html"; // On recharge la page d'accueil (retour visiteur)
+        window.location.href = "index.html"; // On recharge la page d'accueil ======== (retour visiteur) ========
     });
-    const BANDEAU_MODE_EDITION = document.createElement("div");//Création balise pour bande noire
-    BANDEAU_MODE_EDITION.classList.add("admin-bar");//Ajout class pour style
-    BANDEAU_MODE_EDITION.innerText = "Mode édition";//Ajout texte dedans
-    document.body.prepend(BANDEAU_MODE_EDITION);//Insertion tout en haut de body
-    console.log("Bande noire créée !");
-    console.log("Fonction Admin activée");
 
-    const TITRE_PROJETS_DU_HTML = document.querySelector("#portfolio h2");//Ciblage h2 "Mes Projets"
-    const TITRE_CONTENEUR = document.createElement("div");// Création conteneur titre et bouton
+    /* ╔══════════════════════════════╗
+    // ║    CREATION BANDEAU ADMIN    ║
+    // ╚══════════════════════════════╝*/
+    const BANDEAU_MODE_EDITION = document.createElement("div");// CREATION <div>
+    BANDEAU_MODE_EDITION.classList.add("admin-bar");// CLASS
+    BANDEAU_MODE_EDITION.innerText = "Mode édition";// Texte
+    // ======== ASSEMBLAGE BANDEAU DANS BODY ========
+    document.body.prepend(BANDEAU_MODE_EDITION);//Insertion tout en haut de body
+
+        /* ╔══════════════════════════════╗
+        // ║ CIBLAGE TITRE "MES PROJETS"  ║
+        // ╚══════════════════════════════╝*/
+    const TITRE_PROJETS_DU_HTML = document.querySelector("#portfolio h2");
+
+    const TITRE_CONTENEUR = document.createElement("div");// =========== CREATION CONTENEUR TITRE & BOUTON ===========
     TITRE_CONTENEUR.classList.add("titre-projets-container");// Ajout class
+    // =========== ASSEMBLAGE AVANT TITRE "MES PROJETS" ===========
     TITRE_PROJETS_DU_HTML.before(TITRE_CONTENEUR);//Insertion juste avant le h2
+    // =========== ASSEMBLAGE TITRE "MES PROJETS" DANS CONTENEUR TITRES & BOUTON ===========
     TITRE_CONTENEUR.appendChild(TITRE_PROJETS_DU_HTML);// On met le h2 dans le conteneur
 
-    const BOUTON_OUVRIR_MODALE = document.createElement("button");// --- CRÉATION DU BOUTON "MODIFIER" ---
+    const BOUTON_OUVRIR_MODALE = document.createElement("button");// =========== CREATION DU BOUTON MODIFIER ===========
     BOUTON_OUVRIR_MODALE.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Modifier`;//Ajout stylo et texte
-    BOUTON_OUVRIR_MODALE.classList.add("modif-button"); //Ajoute la class
-    TITRE_CONTENEUR.appendChild(BOUTON_OUVRIR_MODALE);// On met le bouton dans le conteneur
+    BOUTON_OUVRIR_MODALE.classList.add("modif-button"); // CLASS
+    // ======== ASSEMBLAGE BOUTON DANS CONTENEUR TITRE & BOUTON
+    TITRE_CONTENEUR.appendChild(BOUTON_OUVRIR_MODALE);
     
-
-    BOUTON_OUVRIR_MODALE.addEventListener("click", function () {//Ecoute du click --- OUVERTURE DE LA MODALE ---
+    BOUTON_OUVRIR_MODALE.addEventListener("click", function () {/** ┌──────────────────────────────┐*/
+                                                                /** │    CLICK BOUTON MODIFIER     │*/
+                                                                /** └──────────────────────────────┘*/
         OUVRIR_MODALE();
     })
 }
@@ -119,93 +153,104 @@ function MODE_ADMIN_ACTIVE() {// Fonction d'affichage pour le mode Administrateu
 // ║                  5. FONCTION OUVRIR MODALE                   ║
 // ╚══════════════════════════════════════════════════════════════╝
 function OUVRIR_MODALE() {
-
-    const CONTENEUR_FOND_MODALE = document.createElement("div");// --- CRÉATION DU FOND (OVERLAY) ---
-    CONTENEUR_FOND_MODALE.classList.add("modal-overlay");//class pour style
-
-    const BOITE_MODALE = document.createElement("div");// --- CRÉATION BOÎTE BLANCHE ---
-    BOITE_MODALE.classList.add("modal-box");//class pour style
-
-    // --- CRÉATION DU CONTENU ---
-    const BOUTON_FLECHE_RETOUR = document.createElement("span"); // Création flèche retour
-    BOUTON_FLECHE_RETOUR.innerHTML = '<i class="fa-solid fa-arrow-left"></i>'; // Icône flèche gauche
-    BOUTON_FLECHE_RETOUR.classList.add("modal-arrow"); // Classe CSS pour position
+    /* ╔═══════════════════════════════╗
+    // ║        CREATION FOND          ║
+    // ╚═══════════════════════════════╝*/
+    const CONTENEUR_FOND_MODALE = document.createElement("div");
+    CONTENEUR_FOND_MODALE.classList.add("modal-overlay");//CLASS
+    /* ╔═══════════════════════════════╗
+    // ║CREATION BOITE BLANCHE (MODALE)║
+    // ╚═══════════════════════════════╝*/
+    const BOITE_MODALE = document.createElement("div");
+    BOITE_MODALE.classList.add("modal-box");//CLASS
+    /* ╔═══════╗
+    // ║CONTENU║
+    // ╚═══════╝*/
+    const BOUTON_FLECHE_RETOUR = document.createElement("span");// Création <span>
+    BOUTON_FLECHE_RETOUR.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';// Icône flèche gauche
+    BOUTON_FLECHE_RETOUR.classList.add("modal-arrow");// CLASS
     const TITRE_BOITE_MODALE = document.createElement("h3");// Titre
-    TITRE_BOITE_MODALE.innerText = "Galerie photo";// Texte titre
-    const BOUTON_FERMER_MODALE = document.createElement("span");// Bouton fermer
-    BOUTON_FERMER_MODALE.innerText = "x";// Texte bouton titre
-    BOUTON_FERMER_MODALE.classList.add("modal-close");// Classe CSS
+    TITRE_BOITE_MODALE.innerText = "Galerie photo";// Texte
+    const BOUTON_FERMER_MODALE = document.createElement("span");// ======== BOUTON FERMER ========
+    BOUTON_FERMER_MODALE.innerText = "x";//Texte
+    BOUTON_FERMER_MODALE.classList.add("modal-close");// CLASS
 
-    const CONTENEUR_GALERIE_MODALE = document.createElement("div");// CONTENEUR des CARTES
-    CONTENEUR_GALERIE_MODALE.classList.add("modal-gallery"); // Classe pour le CSS
+    const CONTENEUR_GALERIE_MODALE = document.createElement("div");// ======== CREATION GRILLE DES CARTES ========
+    CONTENEUR_GALERIE_MODALE.classList.add("modal-gallery");// CLASS
     for (const PROJET of LISTE_PROJETS) {// On boucle sur tous les projets
 
-        const CARTE_PROJET_MODALE = document.createElement("div");// Création boite (carte) pour l'image et la poubelle
-        CARTE_PROJET_MODALE.classList.add("modal-image-container");//class pour style
+        const CARTE_PROJET_MODALE = document.createElement("div");// ======== CREATION CARTE ========
+        CARTE_PROJET_MODALE.classList.add("modal-image-container");// CLASS
+        const CARTE_PROJET_MODALE_IMG = document.createElement("img");// Création <img>
+        CARTE_PROJET_MODALE_IMG.src = PROJET.imageUrl;
 
-        const CARTE_PROJET_MODALE_IMG = document.createElement("img");// On crée l'image
-        CARTE_PROJET_MODALE_IMG.src = PROJET.imageUrl; // L'URL de l'image
-
-        const ICONE_POUBELLE = document.createElement("i");// On crée l'icône poubelle
-        ICONE_POUBELLE.classList.add("fa-solid", "fa-trash-can"); // Classes Font Awesome
-        ICONE_POUBELLE.classList.add("icone-suppr"); // Classe pour le CSS
-
-        ICONE_POUBELLE.addEventListener("click", async function () {// --- SUPPRESSION --- INTELLIGENCE BOUTON POUBELLE
-
-            console.log("Clic poubelle sur le projet ID :", PROJET.id);// Vérif si on capte le clic et l'ID du projet
+        const ICONE_POUBELLE = document.createElement("i");// ======== CREATION ICONE POUBELLE ========
+        ICONE_POUBELLE.classList.add("fa-solid", "fa-trash-can");// CLASS
+        ICONE_POUBELLE.classList.add("icone-suppr");// CLASS
+/** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+        ICONE_POUBELLE.addEventListener("click", async function () {/** ┌──────────────────────────────┐*/
+                                                                    /** │    CLICK BOUTON POUBELLE     │*/
+                                                                    /** └──────────────────────────────┘*/                                                                    
             const REPONSE_SUPPRESSION = await fetch("http://localhost:5678/api/works/" + PROJET.id, {// Envoi demande de suppression à l'API
                 method: "DELETE",
                 headers: { Authorization: "Bearer " + TOKEN_OK }// Identification obligatoire avec token
             });
             if (REPONSE_SUPPRESSION.status === 204) {// Vérif si ça a marché (Code 204 = suppression OK)
-                CARTE_PROJET_MODALE.remove();
-                console.log("Projet supprimé de l'API !");
-                
+                CARTE_PROJET_MODALE.remove();                
                 const INDEX_PROJET = LISTE_PROJETS.findIndex(projet => projet.id === PROJET.id);// On trouve l'index du projet dans la liste pour le retirer
                 LISTE_PROJETS.splice(INDEX_PROJET, 1); // On le coupe de la liste
 
                 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//  --- RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR ---
             }
         });
-
-        CARTE_PROJET_MODALE.appendChild(CARTE_PROJET_MODALE_IMG);// Assemblage : Image dans boite (carte)
-        CARTE_PROJET_MODALE.appendChild(ICONE_POUBELLE);// Assemblage : poubelle dans boite (carte)
-
-        CONTENEUR_GALERIE_MODALE.appendChild(CARTE_PROJET_MODALE);// Assemblage : boite (carte) dans grille
+/** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+        // =========== ASSEMBLAGE IMAGE DANS CARTE ===========
+        CARTE_PROJET_MODALE.appendChild(CARTE_PROJET_MODALE_IMG);
+        // =========== ASSEMBLAGE POUBELLE DANS CARTE ===========
+        CARTE_PROJET_MODALE.appendChild(ICONE_POUBELLE);
+        // =========== ASSEMBLAGE CARTE DANS GRILLE ===========
+        CONTENEUR_GALERIE_MODALE.appendChild(CARTE_PROJET_MODALE);
     }
 
+    // =========== ASSEMBLAGE BOITE BLANCHE ===========
     BOITE_MODALE.appendChild(BOUTON_FLECHE_RETOUR);// --- ASSEMBLAGE ---Met la croix, la fleche retour et le titre DANS la grande boîte blanche
-    BOITE_MODALE.appendChild(BOUTON_FERMER_MODALE);
-    BOITE_MODALE.appendChild(TITRE_BOITE_MODALE);
-    BOITE_MODALE.appendChild(CONTENEUR_GALERIE_MODALE);// On ajoute la grille DANS la boîte (après le titre)
-    CONTENEUR_FOND_MODALE.appendChild(BOITE_MODALE);// On met la grande boîte blanche DANS le fond
-    document.body.appendChild(CONTENEUR_FOND_MODALE);// On met le fond DANS le body
+    BOITE_MODALE.appendChild(BOUTON_FERMER_MODALE);// Met la fleche de retour
+    BOITE_MODALE.appendChild(TITRE_BOITE_MODALE);// Met le titre
+    BOITE_MODALE.appendChild(CONTENEUR_GALERIE_MODALE);// Met la GRILLE
+    CONTENEUR_FOND_MODALE.appendChild(BOITE_MODALE);// MET LA BOITE BLANCHE "DANS" LE FOND
+    document.body.appendChild(CONTENEUR_FOND_MODALE);// ======== MET LE FOND DANS LE BODY ========
 
-    BOUTON_FERMER_MODALE.addEventListener("click", function () {// --- FERMETURE MODALE --- INTELLIGENCE CROIX
+    BOUTON_FERMER_MODALE.addEventListener("click", function () {/** ┌──────────────────────────────┐*/
+                                                                /** │      CLICK BOUTON CROIX      │*/
+                                                                /** └──────────────────────────────┘*/
         CONTENEUR_FOND_MODALE.remove();// Suppression fond (et donc la modale) du body
     });
 
-    CONTENEUR_FOND_MODALE.addEventListener("click", function (event) {// --- EN CLIQUANT À CÔTÉ ---
+    CONTENEUR_FOND_MODALE.addEventListener("click", function (event) {  /** ┌──────────────────────────────┐*/
+                                                                        /** │         CLICK A COTE         │*/
+                                                                        /** └──────────────────────────────┘*/
         if (event.target === CONTENEUR_FOND_MODALE) {// Si on clique bien sur le fond (et pas sur la boîte blanche)
             CONTENEUR_FOND_MODALE.remove();// Suppression fond
         }
     });
    
-    const BOUTON_AJOUTER_PHOTO = document.createElement("button");// --- AJOUT DU BOUTON "AJOUTER UNE PHOTO" ---
-    BOUTON_AJOUTER_PHOTO.innerText = "Ajouter une photo";
-    BOUTON_AJOUTER_PHOTO.classList.add("btn-ajout-photo"); // Classe CSS à styliser plus tard
+    /* ╔═══════════════════════════════╗
+    // ║    BOUTON AJOUTER UNE PHOTO   ║
+    // ╚═══════════════════════════════╝*/
+    const BOUTON_AJOUTER_PHOTO = document.createElement("button");// ======== CREATION BOUTON "AJOUTER UNE PHOTO" ========
+    BOUTON_AJOUTER_PHOTO.innerText = "Ajouter une photo";// Texte
+    BOUTON_AJOUTER_PHOTO.classList.add("btn-ajout-photo"); // CLASS
+    // ======== ASSEMBLAGE BOUTON DANS BOITE BLANCHE ========
     BOITE_MODALE.appendChild(BOUTON_AJOUTER_PHOTO);
 
-    
-    const CONTENEUR_FORMULAIRE_MODALE = document.createElement("div");// --- CRÉATION VUE FORMULAIRE (Cachée par défaut) ---
-    CONTENEUR_FORMULAIRE_MODALE.classList.add("vue-formulaire");
-    CONTENEUR_FORMULAIRE_MODALE.style.display = "none"; // Caché au début
-    BOUTON_FLECHE_RETOUR.style.display = "none"; // Cachée par défaut (car on est sur la galerie)
-
-    
-    // C'est du contenu "statique" (il ne bouge pas). On a juste besoin de l'afficher.
-    // Pas besoin de variable.
-    // C'est donc beaucoup plus rapide d'écrire le HTML d'un coup comme ça
+    /* ╔═══════════════════════════════╗
+    // ║    CREATION VUE FORMULAIRE    ║
+    // ╚═══════════════════════════════╝*/
+    const CONTENEUR_FORMULAIRE_MODALE = document.createElement("div");// Création <div>
+    CONTENEUR_FORMULAIRE_MODALE.classList.add("vue-formulaire");// CLASS
+    CONTENEUR_FORMULAIRE_MODALE.style.display = "none"; // ======== STYLE : CACHé ! ========
+    BOUTON_FLECHE_RETOUR.style.display = "none"; // ======== STYLE FLECHE : CACHé ! ========
+    // Contenu "statique" (ne bouge pas). Juste besoin de l'afficher. Pas besoin de variable.Plus rapide d'écrire le HTML d'un coup comme ça !
         CONTENEUR_FORMULAIRE_MODALE.innerHTML = `
         <div class="champ-image">
             <img src="./assets/icons/picture-svgrepo-com 1.png" class="icone-placeholder" alt="Icône image">
@@ -219,13 +264,15 @@ function OUVRIR_MODALE() {
         <select id="category-input"></select>
         <button id="btn-valider">Valider</button>
     `;
-    BOITE_MODALE.appendChild(CONTENEUR_FORMULAIRE_MODALE);// Assemblage on met le formulaire dans la grande boite blanche
+    // ======== ASSEMBLAGE FORMULAIRE DANS BOITE BLANCHE ========
+    BOITE_MODALE.appendChild(CONTENEUR_FORMULAIRE_MODALE);
 
 
 
-
-        // --- APERÇU DE L'IMAGE AVANT ENVOI ---
-    const CHAMP_IMAGE_INPUT = document.getElementById("image-input");
+    /* ╔═══════════════════════════════╗
+    // ║     CREATION APERCU IMAGE     ║
+    // ╚═══════════════════════════════╝*/
+    const CHAMP_IMAGE_INPUT = document.getElementById("image-input");// Consultation entrée utilisateur
     console.log("Input trouvé ?", CHAMP_IMAGE_INPUT);
     const PREVIEW_IMAGE = document.getElementById("preview-image"); // J'avais oublié cette ligne !
 
