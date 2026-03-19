@@ -1,9 +1,6 @@
 /* ╔══════════════════════════════════════════════════════════════╗
-// ║                                                              ║
+// ║              1. BANDEAU ADMIN (HAUT DE PAGE)                 ║
 // ╚══════════════════════════════════════════════════════════════╝*/
-/* ╔══════════════╗*/
-/* ║ BANDEAU NOIR ║*/
-/* ╚══════════════╝*/
 .admin-bar {
     height: 50px;
     line-height: 50px;
@@ -17,20 +14,41 @@
     color: white;
 }
 
-/* ╔═══════════╗
-// ║ PORTFOLIO ║
-// ╚═══════════╝*/
+/* ╔══════════════════════════════════════════════════════════════╗
+// ║               2. SECTION PORTFOLIO                           ║
+// ╚══════════════════════════════════════════════════════════════╝*/
+
+/* ╔════════════════╗*/
+/* ║ TITRE & MODIF  ║*/
+/* ╚════════════════╝*/
+.titre-projets-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 140px 0 20px 0;
+}
 #portfolio h2 {
     /* margin: 140px 0 50px 0; */
     margin-bottom: 0/*Annule celui de style.css*/;
-
 }
-.gallery {
-    padding: 50px 50px 0 50px;
+.modif-button {
+    height: 37px;
+    min-width: 100px;
     width: auto;
+    border-radius: 18px;
+    border: none;
+    color: rgba(0, 0, 0, 1);
+    background-color: white;
+    font-weight: bold;
+
+    /* display: block;
+    margin: auto; */
 }
-figcaption {
-    margin-top: 5px;
+.modif-button:hover {
+    /* background-color: rgba(29, 97, 84, 1);
+    border: solid 1px white;
+    color: white; */
 }
 
 /* ╔═════════════════╗
@@ -57,33 +75,24 @@ figcaption {
     color: white;
 }
 
-/* ╔═════════════════╗
-// ║ BOUTON MODIFIER ║
-// ╚═════════════════╝*/
-
-.modif-button {
-    height: 37px;
-    min-width: 100px;
+/* ╔════════════════╗*/
+/* ║    GALERIE     ║*/
+/* ╚════════════════╝*/
+.gallery {
+    padding: 50px 50px 0 50px;
     width: auto;
-    border-radius: 18px;
-    border: none;
-    color: rgba(0, 0, 0, 1);
-    background-color: white;
-    font-weight: bold;
-
-    /* display: block;
-    margin: auto; */
 }
-.modif-button:hover {
-    /* background-color: rgba(29, 97, 84, 1);
-    border: solid 1px white;
-    color: white; */
+figcaption {
+    margin-top: 5px;
 }
 
 /* ╔══════════════════════════════════════════════════════════════╗
-// ║            STYLE DE LA MODALE (FOND ET CENTRAGE)             ║
+// ║                    3. FENETRE MODALE                         ║
 // ╚══════════════════════════════════════════════════════════════╝*/
 
+/* ╔════════════════╗*/
+/* ║ FOND & BOITE   ║*/
+/* ╚════════════════╝*/
 .modal-overlay {/* ══════════════════║   FOND    ║═════════════════*/
     position: fixed;/* Fixe l'élément par rapport à la fenêtre du navigateur */
     top: 0;/* Positionne l'élément tout en haut */
@@ -97,9 +106,7 @@ figcaption {
     justify-content: center;/* Centre horizontalement les enfants (la boîte blanche) */
     align-items: center;/* Centre verticalement les enfants */
 }
-
-
-.modal-box {/* ══════════════════║   BOITE BLANCHE   ║═════════════════*/
+.modal-box {/* ══════════════════║   BOITE BLANCHE MODALE   ║═════════════════*/
         /* Taille de la boîte */
     width: auto; /* Une largeur fixe pour un formulaire */
     /* height: 690px; */
@@ -108,7 +115,6 @@ figcaption {
     padding: 50px;
     position: relative; /* Pour pouvoir placer la croix (X) précisément */
 }
-
 .modal-box h3 {/*║   TITRE BOITE BLANCHE   ║*/
     text-align: center;
     font-size: 26px;
@@ -116,12 +122,10 @@ figcaption {
     /* display: block;
     margin: auto; */
 }
-
 .modal-box button {/*║   BOUTON AJOUTER UNE PHOTO   ║*/
     display: block;
     margin: auto;
 }
-
 .modal-arrow {
     position: absolute;
     top: 15px;
@@ -131,7 +135,6 @@ figcaption {
     color: #333;
     cursor: pointer;
 }
-
 .modal-close {/*║   BOUTON CROIX   ║*/
     font-size: 24px; /* Grosse croix */
     font-weight: bold;
@@ -144,7 +147,7 @@ figcaption {
 }
 
 /* ╔════════════════╗*/
-/* ║ GALERIE MODALE ║*/
+/* ║   VUE GALERIE  ║*/
 /* ╚════════════════╝*/
 .modal-gallery {                
     display: grid;
@@ -197,10 +200,9 @@ figcaption {
     color: rgba(29, 97, 84, 1);
 }
 
-/* ╔════════════════════╗*/
-/* ║ FORMULAIRE D'AJOUT ║*/
-/* ╚════════════════════╝*/
-
+/* ╔════════════════╗*/
+/* ║ VUE FORMULAIRE ║*/
+/* ╚════════════════╝*/
 .vue-formulaire {
 display: flex;
 flex-direction: column;
@@ -221,15 +223,33 @@ gap: 5px;
     padding: 0 50px;
     border-radius: 3px;
 }
-
-.champ-image label {/*║   BOUTON AJOUTER PHOTO   ║*/
+.champ-image label {/*║   BOUTON AJOUTER PHOTO (DANS FORM)   ║*/
     background-color: rgba(203, 214, 220, 1);
     color: rgba(48, 102, 133, 1);
     font-weight: 600;
     padding: 10px 20px;
     border-radius: 50px;
 }
-
+#image-input {
+    display: none;
+}
+/* .vue-formulaire input[type="text"],
+.vue-formulaire select {
+    height: 45px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    margin-bottom: 25px;
+    padding: 0 15px;
+    width: 100%;
+    box-sizing: border-box;
+} */
+#title-input,
+#category-input {
+    height: 50px;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    border: none;
+    margin-bottom: 20px;
+}
 #btn-valider {/*║   BOUTON VALIDER   ║*/
     width: 240px;
     border: none;
@@ -241,38 +261,6 @@ gap: 5px;
     font-weight: 700;
     margin-top: 50px;
 }
-/* Effet au survol du bouton */
 #btn-valider:hover {
     background-color: #14463d;
-}
-
-/* .vue-formulaire input[type="text"],
-.vue-formulaire select {
-    height: 45px;
-    border: none;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    margin-bottom: 25px;
-    padding: 0 15px;
-    width: 100%;
-    box-sizing: border-box;
-} */
-
-#title-input,
-#category-input {
-    height: 50px;
-    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-    border: none;
-    margin-bottom: 20px;
-}
-
-#image-input {
-    display: none;
-}
-
-.titre-projets-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin: 140px 0 20px 0;
 }

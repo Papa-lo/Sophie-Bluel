@@ -187,7 +187,7 @@ function OUVRIR_MODALE() {
         const ICONE_POUBELLE = document.createElement("i");// ======== CREATION ICONE POUBELLE ========
         ICONE_POUBELLE.classList.add("fa-solid", "fa-trash-can");// CLASS
         ICONE_POUBELLE.classList.add("icone-suppr");// CLASS
-/** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+        /** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
         ICONE_POUBELLE.addEventListener("click", async function () {/** ┌──────────────────────────────┐*/
                                                                     /** │    CLICK BOUTON POUBELLE     │*/
                                                                     /** └──────────────────────────────┘*/                                                                    
@@ -203,7 +203,7 @@ function OUVRIR_MODALE() {
                 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//  --- RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR ---
             }
         });
-/** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+        /** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
         // =========== ASSEMBLAGE IMAGE DANS CARTE ===========
         CARTE_PROJET_MODALE.appendChild(CARTE_PROJET_MODALE_IMG);
         // =========== ASSEMBLAGE POUBELLE DANS CARTE ===========
@@ -268,53 +268,58 @@ function OUVRIR_MODALE() {
     BOITE_MODALE.appendChild(CONTENEUR_FORMULAIRE_MODALE);
 
 
+    // ╔══════════════════════════════════════════════════════════════╗
+    // ║                  6. GESTION APERCU IMAGE                     ║
+    // ╚══════════════════════════════════════════════════════════════╝
+    /* ╔═══════════════════════════════╗
+    // ║         CIBLAGE INPUT         ║
+    // ╚═══════════════════════════════╝*/
+    const INPUT_SELECTION_IMAGE = document.getElementById("image-input");// CIBLAGE choisie par l'utilisateur
+    const APERCU_IMAGE = document.getElementById("preview-image");// CIBLAGE future image
+    const ICONE_PAR_DEFAUT = document.querySelector(".icone-placeholder");// CIBLAGE Icone paysage
+    const BOUTON_LABEL_CHOISIR_PHOTO = document.querySelector("label[for='image-input']");// CIBLAGE Bouton AJOUTER PHOTO
 
     /* ╔═══════════════════════════════╗
-    // ║     CREATION APERCU IMAGE     ║
+    // ║   EVENEMENT CHANGEMENT IMAGE  ║
     // ╚═══════════════════════════════╝*/
-    const CHAMP_IMAGE_INPUT = document.getElementById("image-input");// Consultation entrée utilisateur
-    console.log("Input trouvé ?", CHAMP_IMAGE_INPUT);
-    const PREVIEW_IMAGE = document.getElementById("preview-image"); // J'avais oublié cette ligne !
+    INPUT_SELECTION_IMAGE.addEventListener("change", function (event) {  /** ┌──────────────────────────────┐*/
+                                                                            /** │  SELECTION IMAGE par USER    │*/
+                                                                            /** └──────────────────────────────┘*/
+        const IMAGE_CHOISIE_PAR_USER = event.target.files[0];// Recuperation fichier sélectionné ??????????????????????????????????????????????????????????????
+        if (IMAGE_CHOISIE_PAR_USER) {// Si un fichier est détecté
+            const LECTEUR_DE_FICHIER = new FileReader();// Outil pour lire le fichier
+            LECTEUR_DE_FICHIER.onload = function(e) {// Quand la lecture est finie...
 
-    console.log("Image preview trouvée ?", PREVIEW_IMAGE);
+                ICONE_PAR_DEFAUT.style.display = "none"; // On cache l'icône paysage
+                BOUTON_LABEL_CHOISIR_PHOTO.style.display = "none"; // On cache le bouton "Ajouter photo"
+                APERCU_IMAGE.style.width = "100%"; // L'image prend toute la largeur
+                APERCU_IMAGE.style.height = "100%"; // L'image prend toute la hauteur
+                APERCU_IMAGE.style.objectFit = "contain"; // L'image remplit sans être déformée
+                APERCU_IMAGE.style.maxWidth = "none";
 
-    const APERCU_AFFICHER = document.querySelector(".icone-placeholder");// Ciblage APERCU AFFICHER
-    const LABEL_AJOUTER = document.querySelector("label[for='image-input']");// Ciblage
-
-    CHAMP_IMAGE_INPUT.addEventListener("change", function (event) {
-        console.log("Fichier sélectionné détecté !");
-        const FICHIER = event.target.files[0];
-        if (FICHIER) {
-            const LECTEUR = new FileReader();
-            LECTEUR.onload = function(e) {
-
-                APERCU_AFFICHER.style.display = "none"; // On cache l'icône paysage
-                LABEL_AJOUTER.style.display = "none"; // On cache le bouton "Ajouter photo"
-                PREVIEW_IMAGE.style.width = "100%"; // L'image prend toute la largeur
-                PREVIEW_IMAGE.style.height = "100%"; // L'image prend toute la hauteur
-                PREVIEW_IMAGE.style.objectFit = "contain"; // L'image remplit sans être déformée
-                PREVIEW_IMAGE.style.maxWidth = "none";
-
-                PREVIEW_IMAGE.src = e.target.result; // On charge l'aperçu
-                PREVIEW_IMAGE.style.display = "block"; // On l'affiche
+                APERCU_IMAGE.src = e.target.result; // On charge l'aperçu
+                APERCU_IMAGE.style.display = "block"; // On l'affiche
             };
-            LECTEUR.readAsDataURL(FICHIER);
+            LECTEUR_DE_FICHIER.readAsDataURL(IMAGE_CHOISIE_PAR_USER);// On lance la lecture du fichier
         }
-    });
+    });// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 
+    /* ╔══════════════════════════════╗
+    // ║   BOUTONS NAVIGATION MODALE  ║
+    // ╚══════════════════════════════╝*/
+    document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);/** ┌──────────────────────────────┐*/
+                                                                                             /** │    CLICK BOUTON VALIDER      │*/
+                                                                                             /** └──────────────────────────────┘*/
 
-
-
-    document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);// --- INTELLIGENCE DU BOUTON VALIDER (Ajouté une seule fois) ---
-
-    BOUTON_AJOUTER_PHOTO.addEventListener("click", function () {// --- INTELLIGENCE DE BASCULE (Galerie <-> Formulaire) ---
+    BOUTON_AJOUTER_PHOTO.addEventListener("click", function () {/** ┌──────────────────────────────┐*/
+                                                                /** │   CLICK "AJOUTER PHOTO"      │*/
+                                                                /** └──────────────────────────────┘*/
         TITRE_BOITE_MODALE.innerText = "Ajout photo";
         CONTENEUR_GALERIE_MODALE.style.display = "none"; // On cache la galerie
         BOUTON_AJOUTER_PHOTO.style.display = "none"; // On cache le bouton ajouter
         CONTENEUR_FORMULAIRE_MODALE.style.display = ""; // On affiche le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "block"; // On affiche la fleche de retour
 
-        // On remplit le select des catégories dynamiquement
         const MENU_CHOIX_CATEGORIE = document.getElementById("category-input");// --- REMPLISSAGE DU MENU DÉROULANT ---
         MENU_CHOIX_CATEGORIE.innerHTML = ""; // On vide avant de remplir
         for (const CATEGORIE_MENU of LISTE_CATEGORIES) {
@@ -325,22 +330,23 @@ function OUVRIR_MODALE() {
         }
     });
 
-    BOUTON_FLECHE_RETOUR.addEventListener("click", function () {// --- INTELLIGENCE DE BASCULE (Formulaire <-> Galerie) ---
+    BOUTON_FLECHE_RETOUR.addEventListener("click", function () {/** ┌──────────────────────────────┐*/
+                                                                /** │     CLICK FLECHE RETOUR      │*/
+                                                                /** └──────────────────────────────┘*/
         TITRE_BOITE_MODALE.innerText = "Galerie photo";
         CONTENEUR_GALERIE_MODALE.style.display = ""; // On laisse le CSS s'occupper de l'affichage
         BOUTON_AJOUTER_PHOTO.style.display = "block"; // On affiche le bouton ajouter
         CONTENEUR_FORMULAIRE_MODALE.style.display = "none"; // On cache le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "none"; // On cache la fleche de retour
-        CHAMP_IMAGE_INPUT.value = "";// Vide l'image choisie
-        PREVIEW_IMAGE.style.display = "none";// Cache son apperçu
-        APERCU_AFFICHER.style.display = "block";// Réafficher l'aperçu
-        LABEL_AJOUTER.style.display = "inline-block";// Réafficher le bouton
+        INPUT_SELECTION_IMAGE.value = "";// Vide l'image choisie
+        APERCU_IMAGE.style.display = "none";// Cache son apperçu
+        ICONE_PAR_DEFAUT.style.display = "block";// Réafficher l'aperçu
+        BOUTON_LABEL_CHOISIR_PHOTO.style.display = "inline-block";// Réafficher le bouton
     });
-
 }
 
 // ╔══════════════════════════════════════════════════════════════╗
-// ║             6. FONCTION ENVOYER NOUVEAU PROJET               ║
+// ║             7. FONCTION ENVOYER NOUVEAU PROJET               ║
 // ╚══════════════════════════════════════════════════════════════╝
 async function ENVOYER_NOUVEAU_PROJET() {
     
@@ -352,7 +358,6 @@ async function ENVOYER_NOUVEAU_PROJET() {
         alert("Veuillez remplir tous les champs");
         return;// Alors on arrête LA FONCTION immédiatement
     }
-
     
     const ENVELOPPE_FORM_DATA = new FormData();// Préparation données pour l'API (FormData est obligatoire pour les fichiers)
     // //FormData c'est un conteneur spécial :
@@ -375,14 +380,12 @@ async function ENVOYER_NOUVEAU_PROJET() {
     if (RETOUR_SERVEUR_AJOUT.status === 201) {
         console.log("Projet ajouté avec succès !");
 
-        // --- LOGIQUE POUR RAFRAICHIR LA GALERIE (Etape 8.2) ---
+        // ======== LOGIQUE POUR RAFRAICHIR LA GALERIE ========
         const NOUVEAU_PROJET_CREE = await RETOUR_SERVEUR_AJOUT.json();// Récupération des infos du projet créé
         LISTE_PROJETS.push(NOUVEAU_PROJET_CREE); // On ajoute le projet à la liste principale (mémoire)
-
         GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS); // --- RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR ---
 
-        // --- MISE À JOUR DE LA MODALE ---
-        
+        // ======== MISE À JOUR DE LA MODALE ========   
         const NOUVELLE_CARTE_MODALE = document.createElement("figure");// Création nouvelle carte pour la modale (comme dans la boucle)
         NOUVELLE_CARTE_MODALE.classList.add("modal-image-container");
         const NOUVELLE_IMAGE_MODALE = document.createElement("img");
@@ -390,9 +393,9 @@ async function ENVOYER_NOUVEAU_PROJET() {
         const NOUVELLE_POUBELLE = document.createElement("i");// Création nouvelle poubelle pour la modale
         NOUVELLE_POUBELLE.classList.add("fa-solid", "fa-trash-can", "icone-suppr");
         
-        NOUVELLE_POUBELLE.addEventListener("click", async function () {// ---  INTELLIGENCE NOUVELLE POUBELLE ---
-            console.log("Clic détecté sur nouvelle poubelle !");
-            console.log("ID du projet à supprimer :", NOUVEAU_PROJET_CREE.id);
+        NOUVELLE_POUBELLE.addEventListener("click", async function () { /** ┌──────────────────────────────┐*/
+                                                                        /** │   CLICK NOUVELLE POUBELLE    │*/
+                                                                        /** └──────────────────────────────┘*/
             const REPONSE_SUPPRESSION = await fetch("http://localhost:5678/api/works/" + NOUVEAU_PROJET_CREE.id, {// Demande de suppression à l'API
                 method: "DELETE",
                 headers: { Authorization: "Bearer " + TOKEN_OK }
@@ -402,7 +405,7 @@ async function ENVOYER_NOUVEAU_PROJET() {
                 NOUVELLE_CARTE_MODALE.remove(); // Auto-suppression de la carte
             }
         });
-
+        // ======== ASSEMBLAGE NOUVELLE CARTE ========
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_IMAGE_MODALE);// Assemblage nouvelle carte
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_POUBELLE);
         
