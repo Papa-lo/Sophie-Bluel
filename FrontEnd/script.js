@@ -175,7 +175,7 @@ function OUVRIR_MODALE() {
     BOUTON_FERMER_MODALE.innerText = "x";//Texte
     BOUTON_FERMER_MODALE.classList.add("modal-close");// CLASS
 
-    const CONTENEUR_GALERIE_MODALE = document.createElement("div");// ======== CREATION GRILLE DES CARTES ========
+    const CONTENEUR_GALERIE_MODALE = document.createElement("div");// ======== CREATION GALERIE DES CARTES ========
     CONTENEUR_GALERIE_MODALE.classList.add("modal-gallery");// CLASS
     for (const PROJET of LISTE_PROJETS) {// On boucle sur tous les projets
 
@@ -211,6 +211,16 @@ function OUVRIR_MODALE() {
         // =========== ASSEMBLAGE CARTE DANS GRILLE ===========
         CONTENEUR_GALERIE_MODALE.appendChild(CARTE_PROJET_MODALE);
     }
+
+
+    // test
+    const LIGNE_GRISE = document.createElement("div");
+    LIGNE_GRISE.classList.add("lignegrise");
+    BOITE_MODALE.appendChild(LIGNE_GRISE);
+
+
+
+
 
     // =========== ASSEMBLAGE BOITE BLANCHE ===========
     BOITE_MODALE.appendChild(BOUTON_FLECHE_RETOUR);// --- ASSEMBLAGE ---Met la croix, la fleche retour et le titre DANS la grande boîte blanche
@@ -257,7 +267,9 @@ function OUVRIR_MODALE() {
             <input type="file" id="image-input" accept="image/*" required>
             <label for="image-input">+ Ajouter photo</label>
             <img id="preview-image" src="" alt="" style="display:none; max-width:100px;">
+            <h6>jpg, png : 4mo max</h6>
         </div>
+
         <label for="title-input">Titre</label> <!-- CORRECTION : for="title-input" -->
         <input type="text" id="title-input" required>
         <label for="category-input">Catégorie</label> <!-- CORRECTION : for="category-input" -->
@@ -283,8 +295,8 @@ function OUVRIR_MODALE() {
     // ║   EVENEMENT CHANGEMENT IMAGE  ║
     // ╚═══════════════════════════════╝*/
     INPUT_SELECTION_IMAGE.addEventListener("change", function (event) {  /** ┌──────────────────────────────┐*/
-                                                                            /** │  SELECTION IMAGE par USER    │*/
-                                                                            /** └──────────────────────────────┘*/
+                                                                         /** │  SELECTION IMAGE par USER    │*/
+                                                                         /** └──────────────────────────────┘*/
         const IMAGE_CHOISIE_PAR_USER = event.target.files[0];// Recuperation fichier sélectionné ??????????????????????????????????????????????????????????????
         if (IMAGE_CHOISIE_PAR_USER) {// Si un fichier est détecté
             const LECTEUR_DE_FICHIER = new FileReader();// Outil pour lire le fichier
