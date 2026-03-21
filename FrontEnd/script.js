@@ -177,33 +177,40 @@ function OUVRIR_MODALE() {
 
     const CONTENEUR_GALERIE_MODALE = document.createElement("div");// ======== CREATION GALERIE DES CARTES ========
     CONTENEUR_GALERIE_MODALE.classList.add("modal-gallery");// CLASS
-    for (const PROJET of LISTE_PROJETS) {// On boucle sur tous les projets
+    for (const PROJET_DE_LA_LISTE of LISTE_PROJETS) {// On boucle sur tous les projets
 
         const CARTE_PROJET_MODALE = document.createElement("div");// ======== CREATION CARTE ========
         CARTE_PROJET_MODALE.classList.add("modal-image-container");// CLASS
         const CARTE_PROJET_MODALE_IMG = document.createElement("img");// Création <img>
-        CARTE_PROJET_MODALE_IMG.src = PROJET.imageUrl;
+        CARTE_PROJET_MODALE_IMG.src = PROJET_DE_LA_LISTE.imageUrl;
 
         const ICONE_POUBELLE = document.createElement("i");// ======== CREATION ICONE POUBELLE ========
         ICONE_POUBELLE.classList.add("fa-solid", "fa-trash-can");// CLASS
         ICONE_POUBELLE.classList.add("icone-suppr");// CLASS
-        /** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+        
         ICONE_POUBELLE.addEventListener("click", async function () {/** ┌──────────────────────────────┐*/
                                                                     /** │    CLICK BOUTON POUBELLE     │*/
                                                                     /** └──────────────────────────────┘*/                                                                    
-            const REPONSE_SUPPRESSION = await fetch("http://localhost:5678/api/works/" + PROJET.id, {// Envoi demande de suppression à l'API
+            const REPONSE_SUPPRESSION = await fetch("http://localhost:5678/api/works/" + PROJET_DE_LA_LISTE.id, {// Envoi demande de suppression à l'API
                 method: "DELETE",
-                headers: { Authorization: "Bearer " + TOKEN_OK }// Identification obligatoire avec token
+                headers: { Authorization: "Bearer " + TOKEN_OK }// Identification obligatoire avec token (bearer : "porteur" du token)
+                // Convention obligatoire pour que le serveur sache que ce qui suit est bien une clé de sécurité
             });
             if (REPONSE_SUPPRESSION.status === 204) {// Vérif si ça a marché (Code 204 = suppression OK)
-                CARTE_PROJET_MODALE.remove();                
-                const INDEX_PROJET = LISTE_PROJETS.findIndex(projet => projet.id === PROJET.id);// On trouve l'index du projet dans la liste pour le retirer
-                LISTE_PROJETS.splice(INDEX_PROJET, 1); // On le coupe de la liste
+                CARTE_PROJET_MODALE.remove();
+                                
+                const INDEX_PROJET = LISTE_PROJETS.findIndex(PROJET_SCANNE => PROJET_SCANNE.id === PROJET_DE_LA_LISTE.id);// On trouve l'index (findindex = scanner) du projet dans la liste pour le retirer
+                /* ça revient à écrire : */
+                /* const INDEX_PROJET = LISTE_PROJETS.findIndex(function(PROJET_SCANNE) { ------- La variable PROJET_SCANNE n'existe que dans la fonction */
+                        /* return PROJET_SCANNE.id === PROJET_DE_LA_LISTE.id; */
+                /* }); */
+                LISTE_PROJETS.splice(INDEX_PROJET, 1); // C'est la paire de ciseaux, on le coupe de la liste
 
                 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//  --- RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR ---
             }
         });
-        /** ???????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????? */
+
+        /** Une fois la liste à jour en mémoire, on redessine la galerie principale de la page d'accueil pour qu'elle soit synchronisée (la photo disparaît aussi de la page principale). */
         // =========== ASSEMBLAGE IMAGE DANS CARTE ===========
         CARTE_PROJET_MODALE.appendChild(CARTE_PROJET_MODALE_IMG);
         // =========== ASSEMBLAGE POUBELLE DANS CARTE ===========
@@ -211,22 +218,15 @@ function OUVRIR_MODALE() {
         // =========== ASSEMBLAGE CARTE DANS GRILLE ===========
         CONTENEUR_GALERIE_MODALE.appendChild(CARTE_PROJET_MODALE);
     }
-
-
-    // test
-    const LIGNE_GRISE = document.createElement("div");
+    const LIGNE_GRISE = document.createElement("div");// ======== CREATION LIGNE GRISE ========
     LIGNE_GRISE.classList.add("lignegrise");
-    BOITE_MODALE.appendChild(LIGNE_GRISE);
-
-
-
-
 
     // =========== ASSEMBLAGE BOITE BLANCHE ===========
     BOITE_MODALE.appendChild(BOUTON_FLECHE_RETOUR);// --- ASSEMBLAGE ---Met la croix, la fleche retour et le titre DANS la grande boîte blanche
     BOITE_MODALE.appendChild(BOUTON_FERMER_MODALE);// Met la fleche de retour
     BOITE_MODALE.appendChild(TITRE_BOITE_MODALE);// Met le titre
     BOITE_MODALE.appendChild(CONTENEUR_GALERIE_MODALE);// Met la GRILLE
+    BOITE_MODALE.appendChild(LIGNE_GRISE);// Met la ligne grise
     CONTENEUR_FOND_MODALE.appendChild(BOITE_MODALE);// MET LA BOITE BLANCHE "DANS" LE FOND
     document.body.appendChild(CONTENEUR_FOND_MODALE);// ======== MET LE FOND DANS LE BODY ========
 
@@ -294,14 +294,15 @@ function OUVRIR_MODALE() {
     /* ╔═══════════════════════════════╗
     // ║   EVENEMENT CHANGEMENT IMAGE  ║
     // ╚═══════════════════════════════╝*/
-    INPUT_SELECTION_IMAGE.addEventListener("change", function (event) {  /** ┌──────────────────────────────┐*/
-                                                                         /** │  SELECTION IMAGE par USER    │*/
-                                                                         /** └──────────────────────────────┘*/
-        const IMAGE_CHOISIE_PAR_USER = event.target.files[0];// Recuperation fichier sélectionné ??????????????????????????????????????????????????????????????
+    INPUT_SELECTION_IMAGE.addEventListener("change", function (EVENT_CHOIX) {   /** ┌──────────────────────────────┐*/
+                                                                                /** │  SELECTION IMAGE par USER    │*/
+                                                                                /** └──────────────────────────────┘*/
+        const IMAGE_CHOISIE_PAR_USER = EVENT_CHOIX.target.files[0];// Recuperation fichier sélectionné, on utilise l'event du clic
         if (IMAGE_CHOISIE_PAR_USER) {// Si un fichier est détecté
-            const LECTEUR_DE_FICHIER = new FileReader();// Outil pour lire le fichier
-            LECTEUR_DE_FICHIER.onload = function(e) {// Quand la lecture est finie...
+            const LECTEUR_DE_FICHIER = new FileReader();// "FileReader" : plans pour créer un "lecteur" qui a le pouvoir de transformer ce fichier en quelque chose d'utilisable par le web
+                                                        // "New" : Je prends les plans et je construis un vrai lecteur
 
+            LECTEUR_DE_FICHIER.onload = function(EVENT_LECTURE) {// Quand la lecture est finie... == ATTENDRE D'AVOIR LU ==
                 ICONE_PAR_DEFAUT.style.display = "none"; // On cache l'icône paysage
                 BOUTON_LABEL_CHOISIR_PHOTO.style.display = "none"; // On cache le bouton "Ajouter photo"
                 APERCU_IMAGE.style.width = "100%"; // L'image prend toute la largeur
@@ -309,12 +310,13 @@ function OUVRIR_MODALE() {
                 APERCU_IMAGE.style.objectFit = "contain"; // L'image remplit sans être déformée
                 APERCU_IMAGE.style.maxWidth = "none";
 
-                APERCU_IMAGE.src = e.target.result; // On charge l'aperçu
+                APERCU_IMAGE.src = EVENT_LECTURE.target.result; // On charge l'aperçu
                 APERCU_IMAGE.style.display = "block"; // On l'affiche
             };
-            LECTEUR_DE_FICHIER.readAsDataURL(IMAGE_CHOISIE_PAR_USER);// On lance la lecture du fichier
+
+            LECTEUR_DE_FICHIER.readAsDataURL(IMAGE_CHOISIE_PAR_USER);// == LIRE ==, on dit au lecteur : "Traduis-moi ce fichier image en un format URL"
         }
-    });// ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    });
 
     /* ╔══════════════════════════════╗
     // ║   BOUTONS NAVIGATION MODALE  ║
