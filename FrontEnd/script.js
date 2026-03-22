@@ -290,6 +290,7 @@ function OUVRIR_MODALE() {
     const APERCU_IMAGE = document.getElementById("preview-image");// CIBLAGE future image
     const ICONE_PAR_DEFAUT = document.querySelector(".icone-placeholder");// CIBLAGE Icone paysage
     const BOUTON_LABEL_CHOISIR_PHOTO = document.querySelector("label[for='image-input']");// CIBLAGE Bouton AJOUTER PHOTO
+    const FORMAT_TAILLE = document.querySelector("h6");
 
     /* ╔═══════════════════════════════╗
     // ║   EVENEMENT CHANGEMENT IMAGE  ║
@@ -303,6 +304,7 @@ function OUVRIR_MODALE() {
                                                         // "New" : Je prends les plans et je construis un vrai lecteur
 
             LECTEUR_DE_FICHIER.onload = function(EVENT_LECTURE) {// Quand la lecture est finie... == ATTENDRE D'AVOIR LU ==
+                FORMAT_TAILLE.style.display = "none";
                 ICONE_PAR_DEFAUT.style.display = "none"; // On cache l'icône paysage
                 BOUTON_LABEL_CHOISIR_PHOTO.style.display = "none"; // On cache le bouton "Ajouter photo"
                 APERCU_IMAGE.style.width = "100%"; // L'image prend toute la largeur
