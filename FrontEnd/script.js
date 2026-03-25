@@ -427,6 +427,14 @@ async function ENVOYER_NOUVEAU_PROJET() {
         
         document.querySelector(".modal-gallery").appendChild(NOUVELLE_CARTE_MODALE);// ON LA COLLE DANS LA GALERIE DE LA MODALE (EN UTILISANT LA CLASSE CSS POUR LA RETROUVER)
 
+        alert("Projet ajouté avec succès !");
+
+        // --- AJOUT POUR FERMER LA MODALE ---
+        const FOND_A_SUPPRIMER = document.querySelector(".modal-overlay"); 
+        if (FOND_A_SUPPRIMER) {
+            FOND_A_SUPPRIMER.remove(); 
+        }
+        
     } else {
         console.log("Erreur lors de l'ajout");
     }
