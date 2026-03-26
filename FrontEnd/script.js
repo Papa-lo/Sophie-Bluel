@@ -36,6 +36,7 @@ function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {
         CONTENEUR_GALERIE_DU_HTML.appendChild(CARTE_PROJET);// Carte dans galerie
     }
 }
+
 /* ╔══════════════════════════════╗
 // ║      AFFICHAGE GALERIE       ║
 // ╚══════════════════════════════╝*/
@@ -270,9 +271,9 @@ function OUVRIR_MODALE() {
             <h6>jpg, png : 4mo max</h6>
         </div>
 
-        <label for="title-input">Titre</label> <!-- CORRECTION : for="title-input" -->
+        <label for="title-input">Titre</label>
         <input type="text" id="title-input" required>
-        <label for="category-input">Catégorie</label> <!-- CORRECTION : for="category-input" -->
+        <label for="category-input">Catégorie</label>
         <select id="category-input"></select>
         <button id="btn-valider">Valider</button>
     `;
@@ -434,7 +435,7 @@ async function ENVOYER_NOUVEAU_PROJET() {
         if (FOND_A_SUPPRIMER) {
             FOND_A_SUPPRIMER.remove(); 
         }
-        
+
     } else {
         console.log("Erreur lors de l'ajout");
     }
