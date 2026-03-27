@@ -15,7 +15,6 @@ FORMULAIRE_POUR_REQUETE_LOGIN.addEventListener("submit", async function (event) 
     const PASSWORD_SAISI = document.getElementById("password").value;
 
     try {
-        console.log("Tentative d'envoi avec :", EMAIL_SAISI, PASSWORD_SAISI);
         // ENVOI DES IDENTIFIANTS AU SERVEUR (Méthode POST)
         const EXECUTION_REQUETE_LOGIN = await fetch('http://localhost:5678/api/users/login', {
             method: "POST",
@@ -28,7 +27,6 @@ FORMULAIRE_POUR_REQUETE_LOGIN.addEventListener("submit", async function (event) 
 
         // RECUPERATION REPONSE BRUT ET TRANSFORMATION en objet JSON utilisable :
         const CONTENU_REPONSE_SERVEUR = await EXECUTION_REQUETE_LOGIN.json();
-        console.log(CONTENU_REPONSE_SERVEUR);
 
         // LOGIQUE DE CONNEXION (TOKEN)    
         if (CONTENU_REPONSE_SERVEUR.token) {// CHECK SI TOKEN OK
