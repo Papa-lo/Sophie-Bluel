@@ -1,35 +1,39 @@
 import { LISTE_PROJETS, LISTE_CATEGORIES, TOKEN_OK, GENERER_ET_AFFICHER_GALERIE } from "./index.js";
 
+// ======================================================================================
+//                                  INITIALISATION ADMIN
+// ======================================================================================
+
 if (TOKEN_OK) {//Si on a trouvé un token dans localstorage :
     ACTIVER_MODE_ADMIN();//Appel fonction d'affichage Admin (PLUS BAS DANS LES LIGNES)
 }
 
 
 
-// _____________ACTIVER_MODE_ADMIN_____________
+// ======================================================================================
+//                                  ACTIVER_MODE_ADMIN
+// ======================================================================================
+
 function ACTIVER_MODE_ADMIN() {// Fonction d'affichage pour le mode Administrateur
 
-    //CREATION BANDEAU ADMIN
+    // ________________________CREATION BANDEAU ADMIN_________________________
     const BANDEAU_MODE_EDITION = document.createElement("div");
     BANDEAU_MODE_EDITION.classList.add("admin-bar");
     BANDEAU_MODE_EDITION.innerText = "Mode édition";
-    //ASSEMBLAGE
     document.body.prepend(BANDEAU_MODE_EDITION);//Insertion tout en haut de body
 
-    //CREATION CONTENEUR TITRE & BOUTON MODIFIER
+    // ____________CREATION CONTENEUR TITRE & BOUTON MODIFIER_________________
     const TITRE_PROJETS_DU_HTML = document.querySelector("#portfolio h2");//CIBLAGE titre "Mes Projets" 
     const CONTENEUR_TITRE_ET_BOUTON_MODIFIER = document.createElement("div");
     CONTENEUR_TITRE_ET_BOUTON_MODIFIER.classList.add("titre-projets-container");
     TITRE_PROJETS_DU_HTML.before(CONTENEUR_TITRE_ET_BOUTON_MODIFIER);//ASSEMBLAGE AVANT titre "Mes Projets"
     CONTENEUR_TITRE_ET_BOUTON_MODIFIER.appendChild(TITRE_PROJETS_DU_HTML);//DEPLACEMENT titre "Mes Projets" dans CONTENEUR TITRES & BOUTON MODIFIER
-    //CREATION DU BOUTON MODIFIER
-    const BOUTON_OUVRIR_MODALE = document.createElement("button");
+    const BOUTON_OUVRIR_MODALE = document.createElement("button");//Création bouton modifier
     BOUTON_OUVRIR_MODALE.innerHTML = `<i class="fa-regular fa-pen-to-square"></i> Modifier`;//Ajout stylo et texte
-    BOUTON_OUVRIR_MODALE.classList.add("modif-button");
-    //ASSEMBLAGE bouton dans CONTENEUR TITRE & BOUTON MODIFIER
-    CONTENEUR_TITRE_ET_BOUTON_MODIFIER.appendChild(BOUTON_OUVRIR_MODALE);
+    BOUTON_OUVRIR_MODALE.classList.add("modif-button");    
+    CONTENEUR_TITRE_ET_BOUTON_MODIFIER.appendChild(BOUTON_OUVRIR_MODALE);//ASSEMBLAGE bouton dans CONTENEUR TITRE & BOUTON MODIFIER
 
-    //DECONNEXION
+    // ________________________DECONNEXION____________________________________
     const LIEN_LOGIN = document.querySelector("nav li:nth-child(3) a");
     LIEN_LOGIN.innerText = "logout";
     LIEN_LOGIN.addEventListener("click", function (event) {//CLICK LOGOUT
@@ -38,6 +42,7 @@ function ACTIVER_MODE_ADMIN() {// Fonction d'affichage pour le mode Administrate
         window.location.href = "index.html";//Redirection (retour visiteur)
     });
     
+    // ________________________OUVERTURE MODALE_______________________________
     BOUTON_OUVRIR_MODALE.addEventListener("click", function () {//CLICK BOUTON MODIFIER
         OUVRIR_MODALE();
     })
@@ -45,17 +50,19 @@ function ACTIVER_MODE_ADMIN() {// Fonction d'affichage pour le mode Administrate
 
 
 
-// _____________OUVRIR MODALE_____________
+// ======================================================================================
+//                                  OUVRIR MODALE
+// ======================================================================================
+
 function OUVRIR_MODALE() {
-    //CREATION FOND
+    // ________________________CREATION FOND & MODALE_________________________
     const FOND_CONTENEUR_MODALE = document.createElement("div");
     FOND_CONTENEUR_MODALE.classList.add("modal-overlay");
 
-    //CREATION MODALE
     const FENETRE_MODALE = document.createElement("div");
     FENETRE_MODALE.classList.add("modal-box");
 
-    //CREATION CONTENU
+    // ________________________CREATION CONTENU_______________________________
     const BOUTON_FLECHE_RETOUR = document.createElement("span");//FLECHE
     BOUTON_FLECHE_RETOUR.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
     BOUTON_FLECHE_RETOUR.classList.add("modal-arrow");
@@ -65,20 +72,19 @@ function OUVRIR_MODALE() {
     BOUTON_FERMER_MODALE.innerText = "x";
     BOUTON_FERMER_MODALE.classList.add("modal-close");
 
-    //CREATION GALERIE DES CARTES
+    // ______________________CREATION GALERIE DES CARTES______________________
     const CONTENEUR_GALERIE_MODALE = document.createElement("div");
     CONTENEUR_GALERIE_MODALE.classList.add("modal-gallery");
-
     for (const PROJET_DE_LA_LISTE of LISTE_PROJETS) {//On boucle sur tous les projets        
-        //CREATION CARTES
+        //Création cartes
         const CARTE_PROJET_MODALE = document.createElement("div");
         CARTE_PROJET_MODALE.classList.add("modal-image-container");
         const IMAGE_CARTE = document.createElement("img");
         IMAGE_CARTE.src = PROJET_DE_LA_LISTE.imageUrl;
-        //CREATION ICONE POUBELLE
+        //Création icone poubelle
         const ICONE_POUBELLE = document.createElement("i");
         ICONE_POUBELLE.classList.add("fa-solid", "fa-trash-can", "icone-suppr");
-        //ASSEMBLAGE GALERIE DES CARTES
+        //ASSEMBLAGE : GALERIE DES CARTES
         CARTE_PROJET_MODALE.appendChild(IMAGE_CARTE);
         CARTE_PROJET_MODALE.appendChild(ICONE_POUBELLE);
         CONTENEUR_GALERIE_MODALE.appendChild(CARTE_PROJET_MODALE);
@@ -94,22 +100,19 @@ function OUVRIR_MODALE() {
                 CARTE_PROJET_MODALE.remove();                                
                 const INDEX_PROJET = LISTE_PROJETS.findIndex(PROJET_SCANNE => PROJET_SCANNE.id === PROJET_DE_LA_LISTE.id);
                 LISTE_PROJETS.splice(INDEX_PROJET, 1);
-
                 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR
             }
         });
     }
 
-    //CREATION LIGNE GRISE
+    // ______________CREATION FORMULAIRE ET BOUTON AJOUTER PHOTO______________
     const LIGNE_GRISE = document.createElement("div");
     LIGNE_GRISE.classList.add("lignegrise");
-
-    //CREATION BOUTON AJOUTER UNE PHOTO
+    //Création bouton ajouter photo
     const BOUTON_AJOUTER_PHOTO = document.createElement("button");
     BOUTON_AJOUTER_PHOTO.innerText = "Ajouter une photo";
     BOUTON_AJOUTER_PHOTO.classList.add("btn-ajout-photo");
-
-    //CREATION FORMULAIRE AJOUT
+    //Création formulaire ajout
     const FORMULAIRE_AJOUT = document.createElement("div");
     FORMULAIRE_AJOUT.classList.add("vue-formulaire");
     FORMULAIRE_AJOUT.style.display = "none";
@@ -128,7 +131,7 @@ function OUVRIR_MODALE() {
     <select id="category-input"></select>
     <button id="btn-valider">Valider</button>`;
     
-    //ASSEMBLAGE MODALE
+    // ________________________ASSEMBLAGE MODALE______________________________
     FENETRE_MODALE.appendChild(BOUTON_FLECHE_RETOUR);
     FENETRE_MODALE.appendChild(BOUTON_FERMER_MODALE);
     FENETRE_MODALE.appendChild(TITRE_FENETRE_MODALE);
@@ -139,10 +142,10 @@ function OUVRIR_MODALE() {
     FOND_CONTENEUR_MODALE.appendChild(FENETRE_MODALE);
     document.body.appendChild(FOND_CONTENEUR_MODALE);
 
+    // ________________________FERMETURE MODALE_______________________________
     BOUTON_FERMER_MODALE.addEventListener("click", function () {//CLICK CROIX
         FOND_CONTENEUR_MODALE.remove();//Suppression fond (et donc modale) du body
     });
-
     FOND_CONTENEUR_MODALE.addEventListener("click", function (event) {//CLICK A COTE
         if (event.target === FOND_CONTENEUR_MODALE) {
             FOND_CONTENEUR_MODALE.remove();
@@ -150,8 +153,8 @@ function OUVRIR_MODALE() {
     });
    
 
-    //GESTION APERCU IMAGE
-    //CIBLAGE
+    // ________________________GESTION APERCU IMAGE___________________________
+    //Ciblage
     const CHAMP_SELECTION_IMAGE = document.getElementById("image-input");//Image choisie par l'utilisateur
     const APERCU_IMAGE = document.getElementById("preview-image");//Aperçu image
     const ICONE_PAR_DEFAUT = document.querySelector(".icone-placeholder");//Icone paysage
@@ -160,7 +163,6 @@ function OUVRIR_MODALE() {
 
     //ACTION : APERCU IMAGE
     CHAMP_SELECTION_IMAGE.addEventListener("change", function (EVENT_CHOIX) {//L'utilisateur selectionne une image
-
         const IMAGE_CHOISIE_PAR_USER = EVENT_CHOIX.target.files[0];//Recuperation fichier sélectionné
 
         if (IMAGE_CHOISIE_PAR_USER) {//Si un fichier est détecté
@@ -181,19 +183,13 @@ function OUVRIR_MODALE() {
         }
     });
 
-    //ACTION : BOUTON VALIDER
-    document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);//CLICK BOUTON VALIDER
-
-
-    //ACTION : OUVRIR FORMULAIRE
+    // ________________________OUVERTURE FORMULAIRE___________________________
     BOUTON_AJOUTER_PHOTO.addEventListener("click", function () {//CLICK BOUTON "AJOUTER PHOTO"
-        //Bascule vers le formulaire
         TITRE_FENETRE_MODALE.innerText = "Ajout photo";
         CONTENEUR_GALERIE_MODALE.style.display = "none";
         BOUTON_AJOUTER_PHOTO.style.display = "none";
         FORMULAIRE_AJOUT.style.display = "";//Affiche le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "block";
-
         const MENU_CHOIX_CATEGORIE = document.getElementById("category-input");//Remplissage du menu Catégorie
         MENU_CHOIX_CATEGORIE.innerHTML = "";//On vide avant de remplir
         for (const CATEGORIE_MENU of LISTE_CATEGORIES) {
@@ -204,39 +200,48 @@ function OUVRIR_MODALE() {
         }
     });
 
-    //ACTION : RETOUR GALLERIE MODALE
+    // ________________________RETOUR GALLERIE MODALE_________________________
     BOUTON_FLECHE_RETOUR.addEventListener("click", function () {
         TITRE_FENETRE_MODALE.innerText = "Galerie photo";
         CONTENEUR_GALERIE_MODALE.style.display = ""; // On laisse le CSS s'occupper de l'affichage
         BOUTON_AJOUTER_PHOTO.style.display = "block"; // On affiche le bouton ajouter
         FORMULAIRE_AJOUT.style.display = "none"; // On cache le formulaire
         BOUTON_FLECHE_RETOUR.style.display = "none"; // On cache la fleche de retour
+        //Reset formulaire
         CHAMP_SELECTION_IMAGE.value = "";// Vide l'image choisie
         APERCU_IMAGE.style.display = "none";// Cache son apperçu
         ICONE_PAR_DEFAUT.style.display = "block";// Réafficher l'aperçu
         BOUTON_CHOISIR_PHOTO.style.display = "inline-block";// Réafficher le bouton
     });
+
+    // ________________________VALIDATION FORMULAIRE__________________________
+    document.getElementById("btn-valider").addEventListener("click", ENVOYER_NOUVEAU_PROJET);//CLICK BOUTON VALIDER
 }
 
 
-// _____________ENVOYER NOUVEAU PROJET_____________
+
+// ======================================================================================
+//                                  ENVOYER NOUVEAU PROJET
+// ======================================================================================
+
 async function ENVOYER_NOUVEAU_PROJET() {
-    
     const CHAMP_IMAGE = document.getElementById("image-input");// Récupération des valeurs du formulaire
     const CHAMP_TITRE = document.getElementById("title-input");
     const CHAMP_CATEGORIE = document.getElementById("category-input");
 
-    if (!CHAMP_IMAGE.files[0] || !CHAMP_TITRE.value) {//Tout est rempli ? Si PAS de fichier sélectionné OU Si PAS de texte dans le titre
+    // ________________________VERIFICATION DES CHAMPS________________________
+    if (!CHAMP_IMAGE.files[0] || !CHAMP_TITRE.value) {
         alert("Veuillez remplir tous les champs");
         return;//Alors on arrête LA FONCTION immédiatement
     }
     
-    //Préparation données pour l'API
+    // ________________________PREPARATION DONNEES____________________________
     const ENVELOPPE_FORM_DATA = new FormData();//FormData : conteneur pouvant contenir du texte et des fichiers lourds
     ENVELOPPE_FORM_DATA.append("image", CHAMP_IMAGE.files[0]);
     ENVELOPPE_FORM_DATA.append("title", CHAMP_TITRE.value);
     ENVELOPPE_FORM_DATA.append("category", CHAMP_CATEGORIE.value);
 
+    // ________________________ENVOI API______________________________________
     const RESULTAT_REQUETE_AJOUT = await fetch("http://localhost:5678/api/works", {//Envoi à l'API : envoie données attente réponse (await)
         method: "POST",
         headers: {
@@ -246,22 +251,19 @@ async function ENVOYER_NOUVEAU_PROJET() {
         body: ENVELOPPE_FORM_DATA//Données formulaire
     });
 
+    // ________________________TRAITEMENT REPONSE_____________________________
     if (RESULTAT_REQUETE_AJOUT.status === 201) {
-
-        //MISE A JOUR GALERIE AVEC LISTE A JOUR
+        //Mise à jour de la liste en mémoire
         const NOUVEAU_PROJET_CREE = await RESULTAT_REQUETE_AJOUT.json();// Récupération des infos du projet créé
         LISTE_PROJETS.push(NOUVEAU_PROJET_CREE); //Ajoute le projet à la liste principale (mémoire)
         GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//Rafraichissement affichage galerie
-
-        //MISE À JOUR AFFICHAGE MODALE
+        //Mise à jour affichage modale
         const NOUVELLE_CARTE_MODALE = document.createElement("figure");
         NOUVELLE_CARTE_MODALE.classList.add("modal-image-container");
         const NOUVELLE_IMAGE_MODALE = document.createElement("img");
         NOUVELLE_IMAGE_MODALE.src = NOUVEAU_PROJET_CREE.imageUrl;
-
         const NOUVELLE_POUBELLE = document.createElement("i");
         NOUVELLE_POUBELLE.classList.add("fa-solid", "fa-trash-can", "icone-suppr");
-
         //ACTION : SUPPRIMER UN PROJET
         NOUVELLE_POUBELLE.addEventListener("click", async function () {//CLICK NOUVELLE POUBELLE
             const REPONSE_SUPPRESSION = await fetch("http://localhost:5678/api/works/" + NOUVEAU_PROJET_CREE.id, {// Demande de suppression à l'API
@@ -273,20 +275,16 @@ async function ENVOYER_NOUVEAU_PROJET() {
                 NOUVELLE_CARTE_MODALE.remove(); // Auto-suppression de la carte
             }
         });
-
-        //ASSEMBLAGE NOUVELLE CARTE
+        //Assemblage de la nouvelle carte
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_IMAGE_MODALE);
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_POUBELLE);
         document.querySelector(".modal-gallery").appendChild(NOUVELLE_CARTE_MODALE);//AFFICHAGE DANS GALERIE MODALE (EN UTILISANT LA CLASSE CSS POUR LA RETROUVER)
-
         alert("Projet ajouté avec succès !");
-
-        //FERMETURE AUTO MODALE
+        //Fermeture auto modale
         const FOND_MODALE = document.querySelector(".modal-overlay"); 
         if (FOND_MODALE) {
             FOND_MODALE.remove(); 
         }
-
     } else {
         console.log("Erreur lors de l'ajout");
     }

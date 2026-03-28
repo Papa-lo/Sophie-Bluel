@@ -9,13 +9,13 @@ export const LISTE_CATEGORIES = await RETOUR_SERVEUR_CATEGORIES.json();// Transf
 
 
 // _____________AFFICHAGE_GALERIE_____________
-// CIBLAGE
+// Ciblage
 const CONTENEUR_GALERIE_DU_HTML = document.querySelector(".gallery");
-// CREATION
+// Création
 export function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {
     CONTENEUR_GALERIE_DU_HTML.innerHTML = "";// Vide la galerie
     for (const PROJET of LISTE_PROJETS_ALIAS) {// Boucle sur chaque projet reçu en argument
-        // CREATION CARTES
+        // Création cartes
         const CARTE_PROJET = document.createElement("figure");
         const CARTE_PROJET_IMG = document.createElement("img");
         CARTE_PROJET_IMG.src = PROJET.imageUrl;
@@ -43,7 +43,7 @@ if (!TOKEN_OK) {//Si non connecté : AFFICHAGE DES FILTRES :
         CONTENEUR_DES_FILTRES.classList.add("conteneur-filtres");
         CONTENEUR_GALERIE_DU_HTML.before(CONTENEUR_DES_FILTRES);// Insertion "before" galerie
 
-        //BOUTON TOUS
+        //Bouton TOUS
         const BOUTON_FILTRE_TOUS = document.createElement("button");
         BOUTON_FILTRE_TOUS.classList.add("btn-filtre");
         BOUTON_FILTRE_TOUS.innerText = "Tous";
@@ -53,7 +53,7 @@ if (!TOKEN_OK) {//Si non connecté : AFFICHAGE DES FILTRES :
             GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);
         });
 
-        //BOUTONS CATEGORIES
+        //Boutons CATEGORIES
         for (const CATEGORIE of LISTE_CATEGORIES) {
         const BOUTON_FILTRE_CATEGORIE = document.createElement("button");
             BOUTON_FILTRE_CATEGORIE.classList.add("btn-filtre");

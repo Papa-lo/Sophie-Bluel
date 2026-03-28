@@ -1,15 +1,12 @@
-/* ╔════════════════╗*/
-/* ║   HTML/BODY    ║*/
-/* ╚════════════════╝*/
+/*_____________HTML_____________*/
 html {
     scroll-behavior: smooth;
+/*_____________BODY_____________*/
 }
 body {
     background-color: rgba(255, 254, 248, 1);
 }
-/* ╔════════════════╗*/
-/* ║       NAV      ║*/
-/* ╚════════════════╝*/
+/*_____________NAV_____________*/
 nav a {
     text-decoration: none;
     color: black;
@@ -28,10 +25,7 @@ nav li {
 nav img:hover {
     cursor: pointer;
 }
-
-/* ╔══════════════════════════════════════════════════════════════╗
-// ║              1. BANDEAU ADMIN (HAUT DE PAGE)                 ║
-// ╚══════════════════════════════════════════════════════════════╝*/
+/*_____________BANDEAU_ADMIN_____________*/
 .admin-bar {
     height: 50px;
     line-height: 50px;
@@ -45,26 +39,17 @@ nav img:hover {
     background-color: black;
     color: white;
 }
-
-/* ╔══════════════════════════════════════════════════════════════╗
-// ║                        2. HEADER                             ║
-// ╚══════════════════════════════════════════════════════════════╝*/
+/*_____________HEADER_____________*/
 header {
     margin: 80px 0 50px;
 }
-/* ╔══════════════════════════════════════════════════════════════╗
-// ║               3. SECTION PORTFOLIO                           ║
-// ╚══════════════════════════════════════════════════════════════╝*/
-/* ╔════════════════╗*/
-/* ║     INTRO      ║*/
-/* ╚════════════════╝*/
+
+/*___________________________PORTFOLIO_____________________________*/
+/*_____________INTRO_____________*/
 #introduction article {
     flex: 0.55;
 }
-
-/* ╔════════════════╗*/
-/* ║ TITRE & MODIF  ║*/
-/* ╚════════════════╝*/
+/*_____________TITRE_____________*/
 .titre-projets-container {
     display: flex;
     justify-content: center;
@@ -75,6 +60,7 @@ header {
 #portfolio h2 {
     margin-bottom: 0;
 }
+/*_____________BOUTON_MODIFIER_____________*/
 .modif-button {
     height: 37px;
     min-width: 100px;
@@ -92,9 +78,7 @@ header {
     cursor: pointer;
 }
 
-/* ╔═════════════════╗
-// ║ BOUTONS FILTRES ║
-// ╚═════════════════╝*/
+/*___________________________FILTRES_____________________________*/
 .conteneur-filtres {
     display: flex;
     justify-content: center; /* Pour centrer les boutons */
@@ -118,9 +102,7 @@ header {
     cursor: pointer;
 }
 
-/* ╔════════════════╗*/
-/* ║    GALERIE     ║*/
-/* ╚════════════════╝*/
+/*___________________________GALERIE_____________________________*/
 .gallery {
     padding: 50px 50px 0 50px;
     width: auto;
@@ -129,14 +111,9 @@ figcaption {
     margin-top: 5px;
 }
 
-/* ╔══════════════════════════════════════════════════════════════╗
-// ║                    4. FENETRE MODALE                         ║
-// ╚══════════════════════════════════════════════════════════════╝*/
-
-/* ╔════════════════╗*/
-/* ║ FOND & BOITE   ║*/
-/* ╚════════════════╝*/
-.modal-overlay {/* ══════════════════║   FOND    ║═════════════════*/
+/*________________________FENETRE MODALE___________________________*/
+/*_____________FOND_____________*/
+.modal-overlay {
     position: fixed;/* Fixe l'élément par rapport à la fenêtre du navigateur */
     top: 0;/* Positionne l'élément tout en haut */
     left: 0;/* Positionne l'élément tout à gauche */
@@ -148,7 +125,8 @@ figcaption {
     justify-content: center;/* Centre horizontalement les enfants (la boîte blanche) */
     align-items: center;/* Verticalement */
 }
-.modal-box {/* ══════════════════║   BOITE BLANCHE MODALE   ║═════════════════*/
+/*_____________MODALE_____________*/
+.modal-box {
     width: 630px;
     height: 670px;
     background-color: white;
@@ -156,16 +134,16 @@ figcaption {
     padding: 30px;
     position: relative; /* Pour pouvoir placer la croix (X) précisément */
 }
-.modal-box h3 {/*║   TITRE BOITE BLANCHE   ║*/
+.modal-box h3 {/*TITRE MODALE*/
     text-align: center;
     font-size: 30px;
     padding: 30px 0 36px 0;
 }
-.modal-box button {/*║   BOUTON AJOUTER --UNE-- PHOTO   ║*/
+.modal-box button {/*BOUTON AJOUTER --UNE-- PHOTO*/
     display: block;
     margin: auto;
 }
-.modal-arrow {/* FLECHE */
+.modal-arrow {/*FLECHE*/
     position: absolute;
     top: 15px;
     left: 15px;
@@ -174,7 +152,7 @@ figcaption {
     color: #333;
     cursor: pointer;
 }
-.modal-close {/*║   BOUTON CROIX   ║*/
+.modal-close {/*BOUTON CROIX*/
     font-size: 24px; /* Grosse croix */
     font-weight: bold;
     color: #333; /* Couleur foncée */
@@ -185,9 +163,7 @@ figcaption {
     right: 20px;/* A 20px de la droite */
 }
 
-/* ╔════════════════╗*/
-/* ║   VUE GALERIE  ║*/
-/* ╚════════════════╝*/
+/*___________________________MODALE GALERIE_____________________________*/
 .modal-gallery {                
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -195,7 +171,7 @@ figcaption {
     margin: 0 70px 36px;
     padding-bottom: 84px;
 }
-.modal-image-container {/* ══════════════════║   CARTES MODALE   ║═════════════════*/
+.modal-image-container {/*CARTES MODALE*/
     position: relative; /* TRÈS IMPORTANT : ça permet à la poubelle de se positionner par rapport à cette boîte */
     width: 76px; /* Taille fixe du carré */
     height: 103px;
@@ -206,7 +182,7 @@ figcaption {
     height: 100%;
     object-fit: cover; /* L'image remplit le carré sans être déformée */
 }
-.icone-suppr {/*║   ICONE POUBELLE   ║*/
+.icone-suppr {/*ICONE POUBELLE*/
     position: absolute; /* Flotte par-dessus l'image */
     top: 5px; /* A 5px du haut */
     left: 5px; /* A 5px de gauche */
@@ -217,7 +193,7 @@ figcaption {
     font-size: 12px; /* Taille de l'icône */
     cursor: pointer; /* Curseur main */
 }
-.btn-ajout-photo {/* ══════════════════║   BOUTON AJOUTER --UNE-- PHOTO   ║═════════════════*/
+.btn-ajout-photo {/*BOUTON AJOUTER --UNE-- PHOTO*/
     height: 36px;
     width: 240px;
     border-radius: 18px;
@@ -233,9 +209,7 @@ figcaption {
     cursor: pointer;
 }
 
-/* ╔════════════════╗*/
-/* ║ VUE FORMULAIRE ║*/
-/* ╚════════════════╝*/
+/*___________________________FORMULAIRE_____________________________*/
 .vue-formulaire {
 display: flex;
 flex-direction: column;
@@ -259,7 +233,7 @@ padding: 0 70px 20px;
     padding: 0 50px;
     border-radius: 3px;
 }
-.champ-image label {/*║   BOUTON AJOUTER PHOTO (DANS FORM)   ║*/
+.champ-image label {/*BOUTON AJOUTER PHOTO (DANS FORM)*/
     background-color: rgba(203, 214, 220, 1);
     color: rgba(48, 102, 133, 1);
     font-weight: 600;
@@ -282,14 +256,14 @@ padding: 0 70px 20px;
 #category-input {
     margin-bottom: 100px;    
 }
-.lignegrise {/* TRAIT GRIS */
+.lignegrise {/*TRAIT GRIS*/
     border: solid 1px rgba(179, 179, 179, 1);
     position: absolute;
     left: 100px;
     bottom: 125px;
     width: 70%;
 }
-#btn-valider {/*║   BOUTON VALIDER   ║*/
+#btn-valider {/*BOUTON VALIDER*/
     width: 240px;
     border: none;
     background-color: rgba(167, 167, 167, 1);
@@ -306,9 +280,7 @@ padding: 0 70px 20px;
 /* =================================== */
 /* =================================== */
 /* =================================== */
-/* ╔════════════════╗*/
-/* ║   PAGE LOGIN   ║*/
-/* ╚════════════════╝*/
+/*___________________________PAGE LOGIN_____________________________*/
 #contact a {
     display: block;
 }
