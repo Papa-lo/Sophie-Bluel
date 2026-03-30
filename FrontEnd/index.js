@@ -12,6 +12,7 @@ export const LISTE_CATEGORIES = await RETOUR_SERVEUR_CATEGORIES.json();// Transf
 // Ciblage
 const CONTENEUR_GALERIE_DU_HTML = document.querySelector(".gallery");
 // Création
+
 export function GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS_ALIAS) {
     CONTENEUR_GALERIE_DU_HTML.innerHTML = "";// Vide la galerie
     for (const PROJET of LISTE_PROJETS_ALIAS) {// Boucle sur chaque projet reçu en argument

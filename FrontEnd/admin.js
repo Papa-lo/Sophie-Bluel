@@ -37,7 +37,7 @@ function ACTIVER_MODE_ADMIN() {// Fonction d'affichage pour le mode Administrate
     const LIEN_LOGIN = document.querySelector("nav li:nth-child(3) a");
     LIEN_LOGIN.innerText = "logout";
     LIEN_LOGIN.addEventListener("click", function (event) {//CLICK LOGOUT
-        event.preventDefault();//Empeche la navigation vers la page login.html
+        event.preventDefault();//Empeche la navigation vers la page login.html (le boulot normal du lien)
         window.localStorage.removeItem("token");//Efface le token
         window.location.href = "index.html";//Redirection (retour visiteur)
     });
@@ -98,8 +98,8 @@ function OUVRIR_MODALE() {
 
             if (REPONSE_SUPPRESSION.status === 204) {
                 CARTE_PROJET_MODALE.remove();                                
-                const INDEX_PROJET = LISTE_PROJETS.findIndex(PROJET_SCANNE => PROJET_SCANNE.id === PROJET_DE_LA_LISTE.id);
-                LISTE_PROJETS.splice(INDEX_PROJET, 1);
+                const POSITION_PROJET = LISTE_PROJETS.findIndex(PROJET_SCANNE => PROJET_SCANNE.id === PROJET_DE_LA_LISTE.id);
+                LISTE_PROJETS.splice(POSITION_PROJET, 1);// Supprime de la RAM
                 GENERER_ET_AFFICHER_GALERIE(LISTE_PROJETS);//RAFRAICHISSEMENT GALERIE AVEC LISTE A JOUR
             }
         });
@@ -166,7 +166,7 @@ function OUVRIR_MODALE() {
         const IMAGE_CHOISIE_PAR_USER = EVENT_CHOIX.target.files[0];//Recuperation fichier sélectionné
 
         if (IMAGE_CHOISIE_PAR_USER) {//Si un fichier est détecté
-            const LECTEUR_DE_FICHIER = new FileReader();//Outil pour lecture de fichier
+            const LECTEUR_DE_FICHIER = new FileReader();//Outil navigateur qui converti en chaine secur.
 
             LECTEUR_DE_FICHIER.onload = function(EVENT_LECTURE) {//Quand le fichier sera lu
                 INFO_FORMAT.style.display = "none";
@@ -221,7 +221,7 @@ function OUVRIR_MODALE() {
 
 
 // ======================================================================================
-//                                  ENVOYER NOUVEAU PROJET
+//                                  ENVOI NOUVEAU PROJET
 // ======================================================================================
 
 async function ENVOYER_NOUVEAU_PROJET() {
