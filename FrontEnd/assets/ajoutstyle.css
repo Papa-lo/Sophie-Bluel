@@ -211,12 +211,11 @@ figcaption {
 
 /*___________________________FORMULAIRE_____________________________*/
 .vue-formulaire {
-display: flex;
-flex-direction: column;
-padding: 0 70px 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 70px 20px;
 }
 .vue-formulaire label {
-
     padding-top: 25px;
     font-size: 16px;
     padding-bottom: 10px;
@@ -277,12 +276,30 @@ padding: 0 70px 20px;
 #btn-valider:hover {
     background-color: #14463d;
 }
+
+/*_________________________ERREURS MODALE___________________________*/
+#message-erreur-modale {
+    /* display: none; */
+    min-height: 24px;
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+
 /* =================================== */
 /* =================================== */
 /* =================================== */
 /*___________________________PAGE LOGIN_____________________________*/
 #contact a {
     display: block;
+}
+#message-erreur {
+    color: red;
+    min-height: 24px;
+    text-align: center;
+    margin-top: 5px;
 }
 /* =================================== */
 /* =================================== */

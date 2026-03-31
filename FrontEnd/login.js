@@ -14,6 +14,12 @@ FORMULAIRE_POUR_REQUETE_LOGIN.addEventListener("submit", async function (event) 
     const EMAIL_SAISI = document.getElementById("email").value;
     const PASSWORD_SAISI = document.getElementById("password").value;
 
+    //Vérification si saisies utilisateur avant le requête.
+    if (EMAIL_SAISI === "" || PASSWORD_SAISI === ""){
+        MESSAGE_ERREUR.innerText = "Veuillez remplir l'email et le mot de passe.";
+        return;
+    }
+
     try {
         //Envoi des identifiants au serveur (Méthode POST)
         const EXECUTION_REQUETE_LOGIN = await fetch('http://localhost:5678/api/users/login', {

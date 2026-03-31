@@ -19,7 +19,7 @@ function ACTIVER_MODE_ADMIN() {// Fonction d'affichage pour le mode Administrate
     // ________________________CREATION BANDEAU ADMIN_________________________
     const BANDEAU_MODE_EDITION = document.createElement("div");
     BANDEAU_MODE_EDITION.classList.add("admin-bar");
-    BANDEAU_MODE_EDITION.innerText = "Mode édition";
+    BANDEAU_MODE_EDITION.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> Mode édition';
     document.body.prepend(BANDEAU_MODE_EDITION);//Insertion tout en haut de body
 
     // ____________CREATION CONTENEUR TITRE & BOUTON MODIFIER_________________
@@ -129,8 +129,10 @@ function OUVRIR_MODALE() {
     <input type="text" id="title-input" required>
     <label for="category-input">Catégorie</label>
     <select id="category-input"></select>
-    <button id="btn-valider">Valider</button>`;
-    
+    <button id="btn-valider">Valider</button>
+    <p id="message-erreur-modale"></p>`;
+
+
     // ________________________ASSEMBLAGE MODALE______________________________
     FENETRE_MODALE.appendChild(BOUTON_FLECHE_RETOUR);
     FENETRE_MODALE.appendChild(BOUTON_FERMER_MODALE);
@@ -166,6 +168,20 @@ function OUVRIR_MODALE() {
         const IMAGE_CHOISIE_PAR_USER = EVENT_CHOIX.target.files[0];//Recuperation fichier sélectionné
 
         if (IMAGE_CHOISIE_PAR_USER) {//Si un fichier est détecté
+
+            //Vérif avant aperçu
+            const FORMATS_AUTORISES = ["image/jpeg", "image/png"];
+            const TAILLE_MAX_AUTORISE = 4 * 1024 * 1024; 
+            if (!FORMATS_AUTORISES.includes(IMAGE_CHOISIE_PAR_USER.type)) {
+                document.getElementById("message-erreur-modale").innerText = "Format incorrect. Seuls le JPG et PNG sont acceptés.";
+                return;//Pas d'aperçu
+            }
+            if (IMAGE_CHOISIE_PAR_USER.size > TAILLE_MAX_AUTORISE) {
+                document.getElementById("message-erreur-modale").innerText = "L'image est trop lourde. Maximum 4 Mo autorisé.";
+                return;//Pas d'aperçu
+            }
+            document.getElementById("message-erreur-modale").innerText = "";//Si tout OK, je vide.
+
             const LECTEUR_DE_FICHIER = new FileReader();//Outil navigateur qui converti en chaine secur.
 
             LECTEUR_DE_FICHIER.onload = function(EVENT_LECTURE) {//Quand le fichier sera lu
@@ -203,15 +219,17 @@ function OUVRIR_MODALE() {
     // ________________________RETOUR GALLERIE MODALE_________________________
     BOUTON_FLECHE_RETOUR.addEventListener("click", function () {
         TITRE_FENETRE_MODALE.innerText = "Galerie photo";
-        CONTENEUR_GALERIE_MODALE.style.display = ""; // On laisse le CSS s'occupper de l'affichage
-        BOUTON_AJOUTER_PHOTO.style.display = "block"; // On affiche le bouton ajouter
-        FORMULAIRE_AJOUT.style.display = "none"; // On cache le formulaire
-        BOUTON_FLECHE_RETOUR.style.display = "none"; // On cache la fleche de retour
+        CONTENEUR_GALERIE_MODALE.style.display = ""; //Je laisse le CSS s'occupper de l'affichage
+        BOUTON_AJOUTER_PHOTO.style.display = "block"; //Je affiche le bouton ajouter
+        FORMULAIRE_AJOUT.style.display = "none"; //Je cache le formulaire
+        BOUTON_FLECHE_RETOUR.style.display = "none"; //Je cache la fleche de retour
         //Reset formulaire
-        CHAMP_SELECTION_IMAGE.value = "";// Vide l'image choisie
-        APERCU_IMAGE.style.display = "none";// Cache son apperçu
-        ICONE_PAR_DEFAUT.style.display = "block";// Réafficher l'aperçu
-        BOUTON_CHOISIR_PHOTO.style.display = "inline-block";// Réafficher le bouton
+        CHAMP_SELECTION_IMAGE.value = "";//Vide l'image choisie
+        APERCU_IMAGE.style.display = "none";//Cache son apperçu
+        ICONE_PAR_DEFAUT.style.display = "block";//Réafficher l'aperçu
+        BOUTON_CHOISIR_PHOTO.style.display = "inline-block";//Réafficher le bouton
+
+        document.getElementById("message-erreur-modale").innerText = "";//Enleve le mess. erreur
     });
 
     // ________________________VALIDATION FORMULAIRE__________________________
@@ -225,15 +243,19 @@ function OUVRIR_MODALE() {
 // ======================================================================================
 
 async function ENVOYER_NOUVEAU_PROJET() {
-    const CHAMP_IMAGE = document.getElementById("image-input");// Récupération des valeurs du formulaire
+    //Récupération valeurs formulaire
+    const CHAMP_IMAGE = document.getElementById("image-input");
     const CHAMP_TITRE = document.getElementById("title-input");
     const CHAMP_CATEGORIE = document.getElementById("category-input");
+    //Message si vide
+    const MESSAGE_ERREUR_MODALE = document.getElementById("message-erreur-modale");
 
-    // ________________________VERIFICATION DES CHAMPS________________________
+    // ________________________VERIFICATION SI CHAMP VIDE_____________________
     if (!CHAMP_IMAGE.files[0] || !CHAMP_TITRE.value) {
-        alert("Veuillez remplir tous les champs");
-        return;//Alors on arrête LA FONCTION immédiatement
+        MESSAGE_ERREUR_MODALE.innerText = "Veuillez remplir tous les champs.";
+        return;//Alors j'arrête LA FONCTION immédiatement
     }
+    MESSAGE_ERREUR_MODALE.innerText = "";//Si OK, j'enlève le mess. d'erreur.
     
     // ________________________PREPARATION DONNEES____________________________
     const ENVELOPPE_FORM_DATA = new FormData();//FormData : conteneur pouvant contenir du texte et des fichiers lourds
@@ -279,7 +301,6 @@ async function ENVOYER_NOUVEAU_PROJET() {
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_IMAGE_MODALE);
         NOUVELLE_CARTE_MODALE.appendChild(NOUVELLE_POUBELLE);
         document.querySelector(".modal-gallery").appendChild(NOUVELLE_CARTE_MODALE);//AFFICHAGE DANS GALERIE MODALE (EN UTILISANT LA CLASSE CSS POUR LA RETROUVER)
-        alert("Projet ajouté avec succès !");
         //Fermeture auto modale
         const FOND_MODALE = document.querySelector(".modal-overlay"); 
         if (FOND_MODALE) {
